@@ -51,6 +51,10 @@ npm run lint -- --fix
 
 更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)
 
+## 界面
+
+![image-20200726224811322](https://raw.githubusercontent.com/1291945816/Images/master/image-20200726224811322.png)
+
 ## Browsers support
 
 Modern browsers and Internet Explorer 10+.

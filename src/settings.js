@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '通用项目申报与评审系统',
 
   /**
    * @type {boolean} true | false
