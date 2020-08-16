@@ -50,33 +50,6 @@
             </span>
           </el-form-item><br>
 
-          <el-form-item prop="authcode" class="wrap-input100 validate-input">
-
-            <input
-              ref="authcode"
-              v-model="loginForm.authcode"
-              class="input100"
-              placeholder="验证码"
-              name="authcode"
-              type="text"
-              tabindex="1"
-              auto-complete="on"
-            >
-            <span class="focus-input100" />
-            <span class="symbol-input100">
-              <i class="fa fa-code" aria-hidden="true" />
-            </span>
-          </el-form-item>
-          <br>
-
-          <el-form-item prop="image">
-            <el-image
-              style="width: 290px; height: 50px"
-              :src="url"
-              :fit="fit"
-            />
-          </el-form-item>
-
           <div class="container-login100-form-btn">
             <el-button :loading="loading" class="login100-form-btn" type="primary" @click.native.prevent="handleLogin">登录</el-button>
           </div>
@@ -107,27 +80,17 @@ export default {
         callback()
       }
     }
-    const validateAuthcode = (rule, value, callback) => {
-      if (value.length !== 4) {
-        callback(new Error('请输入正确的验证码'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         username: 'admin',
-        password: '111111',
-        authcode: '11111'
+        password: '111111'
 
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        authcode: [{ required: true, trigger: 'blur', validator: validateAuthcode }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       fit: 'fill',
-      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
       loading: false,
       passwordType: 'password',
       redirect: undefined

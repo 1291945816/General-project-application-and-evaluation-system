@@ -7,7 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    menus: ''
   }
 }
 
@@ -28,6 +29,10 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  // 新增
+  SET_MENUS: (state, menus) => {
+    state.menus = menus
   }
 }
 
@@ -57,16 +62,52 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
+        console.log(data)
         const { roles, name, avatar } = data
-
-        // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
 
+        // 模拟请求数据
+        const menus = [
+          {
+            'path': '/pn',
+            'name': 'Pn',
+            'component': 'Layout',
+            'redirect': '/publicNotification',
+            'children': [{
+              'path': '/publicNotification',
+              'name': 'PublicNotification',
+              'component': 'notification/PublicNotification',
+              'meta': {
+                'title': '发布通知',
+                'icon': 'notification'
+              }
+            }
+            ]
+          }
+          // {
+          //   'path': '/pr',
+          //   'name': 'Pr',
+          //   'component': 'Layout',
+          //   'redirect': '/projectreview',
+          //   'children': [{
+          //     'path': '/projectreview',
+          //     'name': 'Projectreview',
+          //     'component': 'expert/Projectreview',
+          //     'meta': {
+          //       'title': '项目评审',
+          //       'icon': 'review'
+          //     }
+          //   }
+          //   ]
+          // }
+
+        ]
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_MENUS', menus)
         resolve(data)
       }).catch(error => {
         reject(error)

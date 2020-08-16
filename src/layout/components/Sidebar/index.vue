@@ -12,7 +12,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -28,7 +28,6 @@ export default {
   components: { SidebarItem, Logo },
   computed: {
     ...mapGetters([
-      'permission_routes',
       'sidebar'
     ]),
     activeMenu() {
@@ -39,6 +38,9 @@ export default {
         return meta.activeMenu
       }
       return path
+    },
+    routes() {
+      return this.$router.options.routes.concat(global.antRouter) // 把路由concat进去
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo

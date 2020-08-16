@@ -1,0 +1,10 @@
+<template>
+  <div>
+    <p>发布通知模块</p>
+  </div>
+</template>
+<template>
+  <div>
+    <p>发布通知模块</p>
+  </div>
+</template>
