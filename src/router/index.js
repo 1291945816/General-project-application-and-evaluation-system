@@ -45,6 +45,7 @@ export const asyncRoutes = [
 
 const createRouter = () => new Router({
   scrollBehavior: () => ({ y: 0 }),
+  mode: 'history',
   routes: constantRoutes
 })
 

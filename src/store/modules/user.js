@@ -42,6 +42,7 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
+        // 这说明登陆成功了
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
@@ -57,53 +58,133 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-
-        console.log(data)
-        const { roles, name, avatar } = data
+        const { roles, name, avatar, menus } = data
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
 
-        // 模拟请求数据
-        const menus = [
-          {
-            'path': '/pn',
-            'name': 'Pn',
-            'component': 'Layout',
-            'redirect': '/publicNotification',
-            'children': [{
-              'path': '/publicNotification',
-              'name': 'PublicNotification',
-              'component': 'notification/PublicNotification',
-              'meta': {
-                'title': '发布通知',
-                'icon': 'notification'
-              }
-            }
-            ]
-          }
-          // {
-          //   'path': '/pr',
-          //   'name': 'Pr',
-          //   'component': 'Layout',
-          //   'redirect': '/projectreview',
-          //   'children': [{
-          //     'path': '/projectreview',
-          //     'name': 'Projectreview',
-          //     'component': 'expert/Projectreview',
-          //     'meta': {
-          //       'title': '项目评审',
-          //       'icon': 'review'
-          //     }
-          //   }
-          //   ]
-          // }
-
-        ]
+        // // 模拟请求数据
+        // const menus = [
+        //   {
+        //     'path': '/pn',
+        //     'name': 'Pn',
+        //     'component': 'Layout',
+        //     'redirect': '/publicNotification',
+        //     'children': [{
+        //       'path': '/publicNotification',
+        //       'name': 'PublicNotification',
+        //       'component': 'notification/PublicNotification',
+        //       'meta': {
+        //         'title': '发布通知',
+        //         'icon': 'notification'
+        //       }
+        //     }
+        //     ]
+        //   },
+        //   {
+        //     'path': '/um',
+        //     'name': 'Um',
+        //     'component': 'Layout',
+        //     'redirect': '/studentInfo',
+        //     'meta': {
+        //       'title': '用户管理',
+        //       'icon': 'User Service'
+        //     },
+        //     'children': [{
+        //       'path': '/studentInfo',
+        //       'name': 'StudentInfo',
+        //       'component': 'admin/userManagement/StudentsInfo',
+        //       'meta': {
+        //         'title': '学生信息',
+        //         'icon': 'student'
+        //       }
+        //     },
+        //     {
+        //       'path': '/teachersInfo',
+        //       'name': 'TeachersInfo',
+        //       'component': 'admin/userManagement/TeachersInfo',
+        //       'meta': {
+        //         'title': '教师信息',
+        //         'icon': 'teacher'
+        //       }
+        //     },
+        //     {
+        //       'path': '/evaluationexperts',
+        //       'name': 'Evaluationexperts',
+        //       'component': 'admin/userManagement/Evaluationexperts',
+        //       'meta': {
+        //         'title': '评审专家信息',
+        //         'icon': 'expert'
+        //       }
+        //     }
+        //     ]
+        //   },
+        //   {
+        //     'path': '/ar',
+        //     'name': 'Ar',
+        //     'component': 'Layout',
+        //     'redirect': '/arrReviewexperts',
+        //     'meta': {
+        //       'title': '评审管理',
+        //       'icon': 'preview_manage-01'
+        //     },
+        //     'children': [{
+        //       'path': '/arrReviewexperts',
+        //       'name': 'ArrReviewexperts',
+        //       'component': 'admin/reviewManagement/ArrReviewexperts',
+        //       'meta': {
+        //         'title': '指定评审专家',
+        //         'icon': 'member-experts-pinwx'
+        //       }
+        //     },
+        //     {
+        //       'path': '/reviewResult',
+        //       'name': 'ReviewResult',
+        //       'component': 'admin/reviewManagement/ReviewResult',
+        //       'meta': {
+        //         'title': '项目评审结果',
+        //         'icon': 'result'
+        //       }
+        //     }
+        //     ]
+        //   },
+        //   {
+        //     'path': '/cm',
+        //     'name': 'Cm',
+        //     'component': 'Layout',
+        //     'redirect': '/collegeManagement',
+        //     'children': [{
+        //       'path': '/collegeManagement',
+        //       'name': 'CollegeManagement',
+        //       'component': 'admin/CollegeManagement',
+        //       'meta': {
+        //         'title': '学院管理',
+        //         'icon': 'college'
+        //       }
+        //     }
+        //     ]
+        //   },
+        //   {
+        //     'path': '/mm',
+        //     'name': 'Mm',
+        //     'component': 'Layout',
+        //     'redirect': '/majorManagement',
+        //     'children': [{
+        //       'path': '/majorManagement',
+        //       'name': 'MajorManagement',
+        //       'component': 'admin/MajorManagement',
+        //       'meta': {
+        //         'title': '专业管理',
+        //         'icon': 'major@2x'
+        //       }
+        //     }
+        //     ]
+        //   }
+        // ]
+        menus.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)

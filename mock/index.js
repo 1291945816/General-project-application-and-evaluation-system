@@ -2,7 +2,7 @@ const Mock = require('mockjs')
 const { param2Obj } = require('./utils')
 
 const user = require('./user')
-const table = require('./table')
+const table = require('./table') // 引入模块
 
 const mocks = [
   ...user,
