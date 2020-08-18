@@ -2,14 +2,14 @@
 
 > 这是软件工程专业的软件工程课设，题目为:通用项目申请与评审系统，该源码为系统的前端部分。
 
-## Build Setup
+## 构建设置
 
 ```bash
 # 克隆项目
-git clone https://github.com/PanJiaChen/vue-admin-template.git
+git clone git@github.com:1291945816/General-project-application-and-evaluation-system.git
 
 # 进入项目目录
-cd vue-admin-template
+cd General-project-application-and-evaluation-system
 
 # 安装依赖
 npm install
@@ -49,22 +49,22 @@ npm run lint
 npm run lint -- --fix
 ```
 
-更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)
 
 ## 界面
 
 ![image-20200726224811322](https://raw.githubusercontent.com/1291945816/Images/master/image-20200726224811322.png)
 
-## Browsers support
+## 浏览器支持
 
-Modern browsers and Internet Explorer 10+.
+现代浏览器和IE10+
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
 | --------- | --------- | --------- | --------- |
 | IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
 
-## License
+## 许可证
 
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
+[MIT](https://github.com/1291945816/General-project-application-and-evaluation-system/blob/permission-control/LICENSE) license.
 
 Copyright (c) 2017-present PanJiaChen
+
