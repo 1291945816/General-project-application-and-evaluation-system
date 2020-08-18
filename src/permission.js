@@ -3,14 +3,14 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-// import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import Layout from '@/layout'
 
 const _import = require('./router/_import_' + process.env.NODE_ENV) // 获取组件的方法
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login']
 
 // 全局前置守卫
 router.beforeEach(async(to, from, next) => {
@@ -20,9 +20,8 @@ router.beforeEach(async(to, from, next) => {
 
   document.title = getPageTitle(to.meta.title)
 
-  // determine whether the user has logged in
   // 判断是否获得了token
-  const hasToken = store.getters.token
+  const hasToken = getToken()
 
   // const hasToken=store.getters.token
 
@@ -32,14 +31,13 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
+      // 判断是不是刚进系统 即判断menus有没有
+      const hasMenus = store.getters.menus && store.getters.menus.length > 0
+      if (hasMenus) {
         next()
       } else {
         try {
-          // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+          // 获取用户的信息
           await store.dispatch('user/getInfo') // 获取用户的信息
           if (store.getters.menus.length < 1) {
             global.antRouter = []
@@ -49,13 +47,10 @@ router.beforeEach(async(to, from, next) => {
           const menus = filterAsyncRouter(store.getters.menus) // 1.过滤路由
           router.addRoutes(menus) // 2.动态添加路由
           global.antRouter = menus // 3.将路由数据传递给全局变量，做侧边栏菜单渲染工作
-          // router.addRoutes(accessRoutes)
 
-          // hack method to ensure that addRoutes is complete
-          // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
         } catch (error) {
-          // remove token and go to login page to re-login
+          // remove token and go to login page to re-login //移除token的信息
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)

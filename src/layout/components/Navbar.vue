@@ -5,17 +5,16 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <span class="el-dropdown-link">{{ user_name }}<i class="el-icon-arrow-down el-icon--right" /></span>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              Home
+              首页
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -36,9 +35,12 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'user_name'
     ])
+
   },
+
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -109,23 +111,14 @@ export default {
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
       }
     }
+    .el-dropdown-link {
+    cursor: pointer;
+    color: #f1950a;
   }
+
+  }
+
 }
 </style>

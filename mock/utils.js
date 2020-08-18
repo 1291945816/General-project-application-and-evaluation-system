@@ -1,4 +1,4 @@
-/**
+/** 解析参数
  * @param {string} url
  * @returns {Object}
  */

@@ -225,25 +225,28 @@ const menus_user =
 
 ]
 const users = {
-  'admin-token': {
-    roles: ['admin'],
-    introduction: 'I am a super administrator',
-    avatar: 'https://media.giphy.com/media/ZbBkuBOwthcGXvaIuk/giphy.gif',
-    name: 'Super Admin',
+  'admin': {
+    user_id: 'admin',
+    user_name: '张三',
+    user_phone: '18777524615',
+    user_email: '1291945816@163.com',
+    user_major: '001',
     menus: menus_admin
   },
-  'editor-token': {
-    roles: ['editor'],
-    introduction: 'I am an editor',
-    avatar: 'https://media.giphy.com/media/ZbBkuBOwthcGXvaIuk/giphy.gif',
-    name: 'Normal Editor',
+  'editor': {
+    user_id: 'editor',
+    user_name: '李四',
+    user_phone: '18777524615',
+    user_email: '1291945816@163.com',
+    user_major: '001',
     menus: menus_editor
   },
-  'user-token': {
-    roles: ['1800300916'],
-    introduction: 'I am an user',
-    avatar: 'https://media.giphy.com/media/ZbBkuBOwthcGXvaIuk/giphy.gif',
-    name: 'Normal Editor',
+  '1800300916': {
+    user_id: '1800300916',
+    user_name: '王五',
+    user_phone: '18777524615',
+    user_email: '1291945816@163.com',
+    user_major: '001',
     menus: menus_user
   }
 
@@ -280,8 +283,8 @@ module.exports = [
     url: '/vue-admin-template/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
-      const info = users[token]
+      const { user_id } = config.query
+      const info = users[user_id]
 
       // mock error
       if (!info) {
