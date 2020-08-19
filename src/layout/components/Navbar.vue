@@ -8,11 +8,6 @@
           <span class="el-dropdown-link">{{ user_name }}<i class="el-icon-arrow-down el-icon--right" /></span>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              首页
-            </el-dropdown-item>
-          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出</span>
           </el-dropdown-item>

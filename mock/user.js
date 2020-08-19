@@ -13,7 +13,7 @@ const tokens = {
 // 模拟请求数据
 const menus_admin = [
   {
-    'path': '/pn',
+    'path': '/',
     'name': 'Pn',
     'component': 'Layout',
     'redirect': '/publicNotification',
@@ -131,7 +131,7 @@ const menus_admin = [
 const menus_editor =
 [
   {
-    'path': '/notification',
+    'path': '/',
     'name': 'Notification',
     'component': 'Layout',
     'redirect': '/inform',
@@ -168,7 +168,7 @@ const menus_editor =
 const menus_user =
 [
   {
-    'path': '/notification',
+    'path': '/',
     'name': 'Notification',
     'component': 'Layout',
     'redirect': '/inform',

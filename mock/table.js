@@ -1,29 +1,58 @@
 const Mock = require('mockjs')
 
 const data = Mock.mock({
-  'items|30': [{
-    id: '@id',
-    title: '@sentence(10, 20)',
-    'status|1': ['published', 'draft', 'deleted'],
-    author: 'name',
-    display_time: '@datetime',
-    pageviews: '@integer(300, 5000)'
+  'items|100': [{
+    id: '@integer(50000,60000)',
+    title: '@ctitle',
+    publicDate: '@datetime',
+    publicPerson: '@cname',
+    applyTimestart: '@date',
+    applyTimeend: '@date',
+    applyYear: '2020',
+    reviewTimestart: '@date',
+    reviewTimeend: '@date',
+    content: '@cparagraph',
+    url: 'https://static.runoob.com/images/demo/demo1.jpg',
+    itemcategory: '国家级大创项目'
+
   }]
 })
 
 module.exports = [
   {
-    url: '/vue-admin-template/table/list',
+    url: '/vue-admin-template/table/list\.*',
     type: 'get',
     response: config => {
-      const items = data.items
+      const { offist, limit } = config.query
+      const newData = []
+      const off = parseInt(offist)
+      const lim = parseInt(limit)
+      for (let index = off * 10; index < off * 10 + lim; index++) {
+        if (!data.items.length || index >= data.items.length) {
+          break
+        }
+        newData.push(data.items[index])
+      }
       return {
         code: 20000,
         data: {
-          total: items.length,
-          items: items
+          items: newData
         }
+      }
+    }
+  },
+  {
+    url: '/vue-admin-template/table/count',
+    type: 'get',
+    response: config => {
+      return {
+        code: 20000,
+        data: {
+          count: 100
+        }
+
       }
     }
   }
 ]
+

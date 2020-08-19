@@ -18,23 +18,16 @@ export const constantRoutes = [
   },
 
   {
-    path: '/',
+    path: '/user',
     component: Layout,
     redirect: '/userinfo',
-    meta: { title: '个人管理', icon: 'user' },
+    meta: { title: '我的信息', icon: 'user' },
     children: [{
       path: 'userinfo',
       name: 'Userinfo',
       component: () => import('@/views/common-user/userInfo/Userinfo.vue'),
       meta: { title: '基本信息', icon: 'user-info' }
-    },
-    {
-      path: 'edituserinfo',
-      name: 'Edituserinfo',
-      component: () => import('@/views/common-user/userInfo/EdituserInfo.vue'),
-      meta: { title: '修改信息', icon: 'edit-user' }
     }
-
     ]
   }
 ]

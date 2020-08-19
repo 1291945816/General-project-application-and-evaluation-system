@@ -7,3 +7,10 @@ export function getList(params) {
     params
   })
 }
+
+export function getcount() {
+  return request({
+    url: '/vue-admin-template/table/count',
+    method: 'get'
+  })
+}

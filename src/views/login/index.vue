@@ -121,7 +121,7 @@ export default {
           this.loading = true
           // 校验是否通过 this.loginForm
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' }) // 登陆成功后重定向到首页或者之前还未登陆便访问的页
+            this.$router.push('/') // 登陆成功后重定向到通知页
             this.loading = false
           }).catch(() => {
             this.loading = false
