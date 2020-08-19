@@ -6,11 +6,12 @@ const data = Mock.mock({
     title: '@ctitle',
     publicDate: '@datetime',
     publicPerson: '@cname',
-    applyTimestart: '@date',
-    applyTimeend: '@date',
+
+    applyTimestart: '@datetime',
+    applyTimeend: '@datetime',
     applyYear: '2020',
-    reviewTimestart: '@date',
-    reviewTimeend: '@date',
+    reviewTimestart: '@datetime',
+    reviewTimeend: '@datetime',
     content: '@cparagraph',
     url: 'https://static.runoob.com/images/demo/demo1.jpg',
     itemcategory: '国家级大创项目'
