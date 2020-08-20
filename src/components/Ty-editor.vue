@@ -48,8 +48,7 @@ export default {
         language_url: '/tinymce/zh_CN.js',
         language: 'zh_CN',
         skin_url: '/tinymce/skins/ui/oxide',
-        // skin_url: 'tinymce/skins/ui/oxide-dark',//暗色系
-        height: 300,
+        height: 400,
         plugins: this.plugins,
         toolbar: this.toolbar,
         branding: false,
