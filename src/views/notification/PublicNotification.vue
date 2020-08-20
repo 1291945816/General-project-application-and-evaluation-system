@@ -316,7 +316,7 @@ export default {
     }
   },
   created() {
-    this.getData(0)
+    this.getData(1)
     this.getTotal()
   },
   methods: {
@@ -346,7 +346,7 @@ export default {
       console.log()
     },
     refresh() {
-      this.getData(0)
+      this.getData(1)
       this.getTotal()
     },
     // 删除一行
