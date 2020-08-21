@@ -32,36 +32,14 @@ const menus_admin = [
     'path': '/um',
     'name': 'Um',
     'component': 'Layout',
-    'redirect': '/studentInfo',
-    'meta': {
-      'title': '用户管理',
-      'icon': 'User Service'
-    },
+    'redirect': '/userInfo',
     'children': [{
-      'path': '/studentInfo',
-      'name': 'StudentInfo',
-      'component': 'admin/userManagement/StudentsInfo',
+      'path': '/userInfo',
+      'name': 'UserInfo',
+      'component': 'admin/userManagement/UserInfo',
       'meta': {
-        'title': '学生信息',
+        'title': '用户信息',
         'icon': 'student'
-      }
-    },
-    {
-      'path': '/teachersInfo',
-      'name': 'TeachersInfo',
-      'component': 'admin/userManagement/TeachersInfo',
-      'meta': {
-        'title': '教师信息',
-        'icon': 'teacher'
-      }
-    },
-    {
-      'path': '/evaluationexperts',
-      'name': 'Evaluationexperts',
-      'component': 'admin/userManagement/Evaluationexperts',
-      'meta': {
-        'title': '评审专家信息',
-        'icon': 'expert'
       }
     }
     ]

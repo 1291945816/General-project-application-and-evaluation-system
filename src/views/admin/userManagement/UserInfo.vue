@@ -2,35 +2,45 @@
   <div>
 
     <div class="buttonGroup">
-      <el-input placeholder="请输入学号" prefix-icon="el-icon-search" style="width: 30%;" />
-      <el-button type="primary" style="margin-left: 10px;" @click="refresh()"> 刷新  <i class="el-icon-refresh el-icon--right" /></el-button>
+      <el-input v-model="search_data" placeholder="请输入id" prefix-icon="el-icon-search" style="width: 30%;" />
+      <el-button type="primary" style="margin-left: 10px;" @click="search()"> 搜索  <i class="el-icon-refresh el-icon--right" /></el-button>
       <el-button type="success" @click="add()">新增<i class="el-icon-circle-plus el-icon--right" /></el-button>
       <el-button type="info" @click="uploadVisiable=true">批量导入 <i class="el-icon-upload el-icon--right" /></el-button></div>
     <div class="tablec">
       <el-table
         :data="studentInfo"
-        height="550"
+        max-height="550"
         border
         style="width: 100%;"
       >
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="邮箱">
+                <span>{{ props.row.user_email }}</span>
+              </el-form-item>
+              <el-form-item label="手机号码">
+                <span>{{ props.row.user_phone }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="user_id"
-          label="学号"
+          label="编号"
         />
         <el-table-column
           prop="user_name"
           label="姓名"
         />
+
         <el-table-column
-          prop="user_email"
-          label="邮箱"
+          prop="role.role_name"
+          label="角色"
         />
+
         <el-table-column
-          prop="user_phone"
-          label="手机号码"
-        />
-        <el-table-column
-          prop="user_major"
+          prop="major.major_name"
           label="专业"
         />
         <el-table-column
@@ -67,13 +77,24 @@
         <el-form-item label="密码">
           <el-input v-model="row.user_password" type="password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="专业" prop="user_major">
-          <el-select v-model="row.user_major" placeholder="请选择专业">
+        <el-form-item label="专业" prop="major.major_name">
+          <el-select v-model="row.major.major_name" placeholder="请选择专业">
             <el-option
               v-for="item in major"
               :key="item.major_id"
               :label="item.major_name"
-              :value="item.major_id"
+              :value="item.major_name"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="角色" prop="role.role_name">
+          <el-select v-model="row.role.role_name" placeholder="请选择角色">
+            <el-option
+              v-for="item in role"
+              :key="item.role_id"
+              :label="item.role_name"
+              :value="item.role_name"
             />
           </el-select>
         </el-form-item>
@@ -105,13 +126,23 @@
         <el-form-item label="密码" prop="user_password">
           <el-input v-model="newrow.user_password" type="password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="专业" prop="user_major">
-          <el-select v-model="newrow.user_major" placeholder="请选择专业">
+        <el-form-item label="专业" prop="major.major_name">
+          <el-select v-model="newrow.major.major_name" placeholder="请选择专业">
             <el-option
               v-for="item in major"
               :key="item.major_id"
               :label="item.major_name"
-              :value="item.major_id"
+              :value="item.major_name"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="角色" prop="role.role_name">
+          <el-select v-model="newrow.role.role_name" placeholder="请选择角色">
+            <el-option
+              v-for="item in role"
+              :key="item.role_id"
+              :label="item.role_name"
+              :value="item.role_name"
             />
           </el-select>
         </el-form-item>
@@ -154,43 +185,65 @@
   </div>
 </template>
 <script>
-import { getStudentInfo, getcount, getAllMajor, addStudentInfo, updateStudenInfo, delStudentInfo } from '@/api/student'
+import { getUserInfo, getcount, getAllMajor, searchUser, addUserInfo, updateUserInfo, delUserInfo, getAllRole } from '@/api/userInfo'
 export default {
   data() {
     return {
       studentInfo: [],
       total: 1000,
       major: [],
+      search_data: '',
+      role: [], // 角色列表
       editVisiable: false,
       newVisiable: false,
       major_id: '',
       uploadVisiable: false,
-      action: '/api/importStudents',
-      href: 'http://print.kilig.ink/%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E7%94%A8%E6%88%B7%E6%A8%A1%E6%9D%BF.xlsx',
+      action: '/api/importUsers',
+      href: 'http://print.kilig.ink/%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E7%94%A8%E6%88%B7%E6%A8%A1%E6%9D%BF.xlsx', // 模板表
       row: {
         user_id: '',
         user_name: '',
-        user_major: '',
+        major: {
+          major_id: '',
+          major_name: ''
+        },
         user_password: '',
         user_email: '',
-        user_phone: ''
+        user_phone: '',
+        role: {
+          role_id: '',
+          role_name: ''
+        }
+
       },
       newrow: {
         user_id: '',
         user_name: '',
-        user_major: '',
+        major: {
+          major_id: '',
+          major_name: ''
+        },
         user_password: '',
         user_email: '',
-        user_phone: ''
+        user_phone: '',
+        role: {
+          role_id: '',
+          role_name: ''
+        }
 
       },
       selectedEditRow: null,
       rules: {
         user_id: [{ required: true, message: '学号不能够为空', trriger: 'blur' }],
         user_name: [{ required: true, message: '用户名不能够为空', trriger: 'blur' }],
-        user_major: [{ required: true, message: '专业不能够为空', trriger: 'blur' }],
-        user_password: [{ required: true, message: '密码不能够为空', trriger: 'blur' }]
+        major: {
+          major_name: [{ required: true, message: '专业不能够为空', trriger: 'blur' }]
+        },
+        user_password: [{ required: true, message: '密码不能够为空', trriger: 'blur' }],
+        role: {
+          role_name: [{ required: true, message: '角色不能够为空', trriger: 'blur' }]
 
+        }
       }
     }
   },
@@ -199,6 +252,13 @@ export default {
     this.getTotal()
   },
   methods: {
+    // 支持模糊查找
+    search() {
+      searchUser({ user_id: this.search_data || '' }).then(res => {
+        console.log(res.data)
+        this.studentInfo = res.data.res
+      })
+    },
     uploaderror(res) {
       this.$message.error('上传失败')
     },
@@ -213,30 +273,40 @@ export default {
             user_id: this.newrow.user_id,
             user_name: this.newrow.user_name,
             user_password: this.newrow.user_password,
-            user_major: this.newrow.user_major,
+            major: {
+              major_id: this.major.filter(item => this.newrow.major.major_name === item.major_name)[0].major_id,
+              major_name: this.row.major.major_name
+            },
             user_phone: this.newrow.user_phone,
-            user_email: this.newrow.user_email
+            user_email: this.newrow.user_email,
+            role: {
+              role_id: this.role.filter(res => this.newrow.role.role_name === res.role_name)[0].role_id,
+              role_name: this.newrow.role.role_name
+            }
+
           }
-          addStudentInfo(data).then(res => {
+          addUserInfo(data).then(res => {
             this.$message.success(res.message)
             this.newrow.user_id = ''
             this.newrow.user_name = ''
             this.newrow.user_password = ''
-            this.newrow.user_major = ''
             this.newrow.user_phone = ''
             this.newrow.user_email = ''
             this.newVisiable = false
+            this.newrow.role = []
+            this.newrow.major = []
           }).catch(error => {
             this.$message.error(error)
             this.$message.error('后台出错，提交失败')
           })
         } else {
-          this.$message.success('提交失败')
+          this.$message.error('提交失败')
         }
       })
     },
     add() {
       this.getMajor()
+      this.getRole()
       this.newVisiable = true
     },
     getData(val) {
@@ -244,7 +314,7 @@ export default {
         offist: val,
         limit: 10
       }
-      getStudentInfo(params).then((res) => {
+      getUserInfo(params).then((res) => {
         this.studentInfo = res.data.items
         this.$message.success('获取成功')
       }).catch((error) => {
@@ -259,12 +329,15 @@ export default {
       })
     },
     edit(value) {
-      this.getMajor()
+      this.getMajor()// 获取所有专业信息
+      this.getRole() // 获取所有角色信息
       this.editVisiable = true
       this.row.user_id = value.user_id
       this.row.user_name = value.user_name
       this.row.user_phone = value.user_phone
       this.row.user_email = value.user_email
+      this.row.role = value.role
+      this.row.major = value.major
       this.selectedEditRow = value
     },
     getMajor() {
@@ -278,6 +351,13 @@ export default {
       this.getData(1)
       this.getTotal()
     },
+    getRole() {
+      getAllRole().then(res => {
+        this.role = res.data.role
+      }).catch((error) => {
+        this.$message.error(error)
+      })
+    },
     // 这里通过获取信息 进行提交
     submit() {
       this.$refs['row'].validate(vali => {
@@ -286,17 +366,24 @@ export default {
             user_id: this.row.user_id,
             user_name: this.row.user_name,
             user_password: this.row.user_password,
-            user_major: this.row.user_major,
+            major: {
+              major_id: this.major.filter(item => this.row.major.major_name === item.major_name)[0].major_id,
+              major_name: this.row.major.major_name
+            },
             user_phone: this.row.user_phone,
-            user_email: this.row.user_email
+            user_email: this.row.user_email,
+            role: {
+              role_id: this.role.filter(res => this.row.role.role_name === res.role_name)[0].role_id,
+              role_name: this.row.role.role_name
+            }
           }
-          updateStudenInfo(data).then(res => {
+          updateUserInfo(data).then(res => {
             this.selectedEditRow.user_name = this.row.user_name
-            this.selectedEditRow.user_major = this.major.filter(res => this.row.user_major === res.major_id)[0].major_name
-            this.selectedEditRow.user_phone = this.row.user_email
+            this.selectedEditRow.user_eamil = this.row.user_email
             this.selectedEditRow.user_phone = this.row.user_phone
+            this.selectedEditRow.role = this.row.role
+            this.selectedEditRow.major = this.row.major
             this.$message.success(res.message)
-
             this.editVisiable = false
           }).catch(error => {
             this.$message.error(error)
@@ -307,9 +394,9 @@ export default {
         }
       })
     },
-    // 删除学生信息
+    // 删除用户信息
     deleteStu(index, user_id) {
-      delStudentInfo(user_id).then(res => {
+      delUserInfo(user_id).then(res => {
         this.$message.success(res.message)
         this.studentInfo.splice(index, 1)
       })

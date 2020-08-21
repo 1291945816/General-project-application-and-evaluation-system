@@ -21,23 +21,40 @@ const data = Mock.mock({
 
 const student = Mock.mock({
   'items|78': [{
-    user_id: '1800300916',
-    user_name: '黄丕松',
+    'user_id|1': ['1800300916', '1800300404', '123456789', '1800300961', '2000300489'],
+    'user_name|1': ['张三', '李四', '王五', '哈哈哈哈', '哦哦哦'],
     user_phone: '18777524615',
-    user_major: '软件工程',
-    user_email: '1291945816@163.com'
+    'major|1': [{
+      major_id: '1',
+      major_name: '软件工程'
+
+    }],
+    user_email: '1291945816@163.com',
+    'role|1': [
+      {
+        'role_id|1': ['1', '2'],
+        'role_name|1': ['学生', '老师']
+      }
+    ]
 
   }]
 })
 
 const major = Mock.mock({
-  'major|10': [{
-    major_id: '@id',
-    major_name: '@cname'
+  'major': [{
+    major_id: '1',
+    major_name: '软件工程'
 
   }]
 })
 
+const role = Mock.mock({
+  'role|2': [{
+    'role_id|1': ['1', '2'],
+    'role_name|1': ['学生', '老师']
+
+  }]
+})
 module.exports = [
   {
     url: '/vue-admin-template/table/list\.*',
@@ -73,9 +90,21 @@ module.exports = [
       }
     }
   },
+  {
+    url: '/api/role/list',
+    type: 'get',
+    response: config => {
+      return {
+        code: 20000,
+        data: {
+          role: role.role
+        }
+      }
+    }
+  },
 
   {
-    url: '/vue-admin-template/student/list\.*',
+    url: '/vue-admin-template/user/list\.*',
     type: 'get',
     response: config => {
       const { offist, limit } = config.query
@@ -106,6 +135,22 @@ module.exports = [
           count: 78
         }
 
+      }
+    }
+  },
+
+  {
+    url: '/api/user/search\.*',
+    type: 'get',
+    response: config => {
+      // const { user_id } = config.query
+      const data = []
+      data.push(student.items[0])
+      return {
+        code: 20000,
+        data: {
+          res: data
+        }
       }
     }
   }
