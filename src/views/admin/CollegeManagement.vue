@@ -1,10 +1,10 @@
 <template>
   <div class="contain">
     <div class="head">
-      <el-input v-model="search" style="width: 30%;" placeholder="请输入专业编号" />
-      <el-button type="primary" style="margin-left: 10px;" @click="SearchInfo()">搜索</el-button>
-      <el-button type="success" @click="newRow()">新增</el-button>
-      <el-button type="info" @click="moreImport()">批量导入</el-button>
+      <el-input v-model="search" style="width: 30%;" placeholder="请输入学院编号" />
+      <el-button type="primary" style="margin-left: 10px;" icon="el-icon-search" @click="SearchInfo()">搜索</el-button>
+      <el-button type="success" @click="newRow()">新增<i class="el-icon-circle-plus el-icon--right" /></el-button>
+      <el-button type="info" @click="moreImport()">批量导入<i class="el-icon-upload el-icon--right" /></el-button>
     </div>
     <div class="main">
       <el-table :data="collegeInfo" border max-height="550" style="width: 100%;" stripe>
@@ -81,7 +81,7 @@
       >
         <i class="el-icon-upload" />
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div slot="tip" class="el-upload__tip">只能上传excel文件，<a :href="href">点击这里下载模板文件</a>  </div>
+        <div slot="tip" class="el-upload__tip">只能上传Excel文件，<a :href="href" style="color: red;font-weight: bold; font-size: 16px;">点击这里下载模板</a></div>
       </el-upload>
     </el-dialog>
 
@@ -141,7 +141,8 @@ export default {
       })
     },
     SearchInfo() {
-      SearchCollegeInfo({ id: this.search || '' }).then(res => {
+      if (!this.search) return
+      SearchCollegeInfo({ id: this.search, pageNum: 1, limit: 10 }).then(res => {
         this.collegeInfo = res.data
         this.total = res.data.length // 设置长度
       })
@@ -191,15 +192,22 @@ export default {
     },
     // 拉取学院数据
     InitCollegeInfo(val) {
-      const params = {
-        pageNum: val,
-        limit: 10
+      if (!this.search) {
+        const params = {
+          pageNum: val,
+          limit: 10
+        }
+        getCollegeInfo(params).then(res => {
+          this.collegeInfo = res.data
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      } else {
+        SearchCollegeInfo({ id: this.search, pageNum: val, limit: 10 }).then(res => {
+          this.collegeInfo = res.data
+          this.total = res.data.length // 设置长度
+        })
       }
-      getCollegeInfo(params).then(res => {
-        this.collegeInfo = res.data
-      }).catch(error => {
-        this.$message.error(error)
-      })
     },
     getTotal() {
       getCollegecount().then(res => {
@@ -215,14 +223,20 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .contain{
   margin-left: 20px;
   margin-top: 20px;
+
 }
 .main{
   margin-top: 20px;
   margin-right: 20px;
+  box-shadow: 0 2px 4px rgba(26, 10, 10, 0.12), 0 0 6px rgba(0, 0, 0, .04);
+}
+.foot{
+  margin-top: 20px;
+
 }
 
 </style>

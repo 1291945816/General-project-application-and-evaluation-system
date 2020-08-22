@@ -3,7 +3,7 @@
 
     <div class="buttonGroup">
       <el-input v-model="search_data" placeholder="请输入id" prefix-icon="el-icon-search" style="width: 30%;" />
-      <el-button type="primary" style="margin-left: 10px;" @click="search()"> 搜索  <i class="el-icon-refresh el-icon--right" /></el-button>
+      <el-button type="primary" style="margin-left: 10px;" icon="el-icon-search" @click="search()"> 搜索  </el-button>
       <el-button type="success" @click="add()">新增<i class="el-icon-circle-plus el-icon--right" /></el-button>
       <el-button type="info" @click="uploadVisiable=true">批量导入 <i class="el-icon-upload el-icon--right" /></el-button></div>
     <div class="tablec">
@@ -254,7 +254,8 @@ export default {
   methods: {
     // 支持模糊查找
     search() {
-      searchUser({ user_id: this.search_data || '' }).then(res => {
+      if (!this.search_data) return
+      searchUser({ user_id: this.search_data, pageNum: 1, limit: 10 }).then(res => {
         console.log(res.data)
         this.studentInfo = res.data.res
         this.total = res.data.res.length
@@ -305,16 +306,24 @@ export default {
       this.newVisiable = true
     },
     getData(val) {
-      const params = {
-        offist: val,
-        limit: 10
+      if (this.search_data) {
+        searchUser({ user_id: this.search_data, pageNum: val, limit: 10 }).then(res => {
+          console.log(res.data)
+          this.studentInfo = res.data.res
+          this.total = res.data.res.length
+        })
+      } else {
+        const params = {
+          offist: val,
+          limit: 10
+        }
+        getUserInfo(params).then((res) => {
+          this.studentInfo = res.data.items
+          this.$message.success('获取成功')
+        }).catch((error) => {
+          this.$message.error(error)
+        })
       }
-      getUserInfo(params).then((res) => {
-        this.studentInfo = res.data.items
-        this.$message.success('获取成功')
-      }).catch((error) => {
-        this.$message.error(error)
-      })
     },
     getTotal() {
       getcount().then((res) => {
@@ -341,10 +350,6 @@ export default {
       }).catch((error) => {
         this.$message.error(error)
       })
-    },
-    refresh() {
-      this.getData(1)
-      this.getTotal()
     },
     getRole() {
       getAllRole().then(res => {

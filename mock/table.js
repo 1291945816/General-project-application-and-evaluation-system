@@ -42,8 +42,8 @@ const student = Mock.mock({
 })
 
 const college = Mock.mock({
-  'college|135': [{
-    id: 'AX4506',
+  'college': [{
+    id: '003',
     name: '计算机与信息安全学院'
 
   }]
@@ -117,6 +117,12 @@ module.exports = [
     type: 'get',
     response: config => {
       const { pageNum, limit } = config.query
+      if (limit === '-1') {
+        return {
+          code: 20000,
+          data: college.college
+        }
+      }
       const newData = []
       const off = parseInt(pageNum) - 1
       const lim = parseInt(limit)
@@ -177,22 +183,6 @@ module.exports = [
           count: 78
         }
 
-      }
-    }
-  },
-
-  {
-    url: '/api/user/search\.*',
-    type: 'get',
-    response: config => {
-      // const { user_id } = config.query
-      const data = []
-      data.push(student.items[0])
-      return {
-        code: 20000,
-        data: {
-          res: data
-        }
       }
     }
   }

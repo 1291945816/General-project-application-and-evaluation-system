@@ -3,10 +3,12 @@ const { param2Obj } = require('./utils')
 
 const user = require('./user')
 const table = require('./table') // 引入模块
+const major = require('./major')
 
 const mocks = [
   ...user,
-  ...table
+  ...table,
+  ...major
 ]
 
 // for front mock
