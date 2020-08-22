@@ -257,6 +257,7 @@ export default {
       searchUser({ user_id: this.search_data || '' }).then(res => {
         console.log(res.data)
         this.studentInfo = res.data.res
+        this.total = res.data.res.length
       })
     },
     uploaderror(res) {
@@ -273,16 +274,10 @@ export default {
             user_id: this.newrow.user_id,
             user_name: this.newrow.user_name,
             user_password: this.newrow.user_password,
-            major: {
-              major_id: this.major.filter(item => this.newrow.major.major_name === item.major_name)[0].major_id,
-              major_name: this.row.major.major_name
-            },
+            major_id: this.major.filter(item => this.newrow.major.major_name === item.major_name)[0].major_id,
             user_phone: this.newrow.user_phone,
             user_email: this.newrow.user_email,
-            role: {
-              role_id: this.role.filter(res => this.newrow.role.role_name === res.role_name)[0].role_id,
-              role_name: this.newrow.role.role_name
-            }
+            role_id: this.role.filter(res => this.newrow.role.role_name === res.role_name)[0].role_id
 
           }
           addUserInfo(data).then(res => {
@@ -366,16 +361,11 @@ export default {
             user_id: this.row.user_id,
             user_name: this.row.user_name,
             user_password: this.row.user_password,
-            major: {
-              major_id: this.major.filter(item => this.row.major.major_name === item.major_name)[0].major_id,
-              major_name: this.row.major.major_name
-            },
+            major_id: this.major.filter(item => this.row.major.major_name === item.major_name)[0].major_id,
             user_phone: this.row.user_phone,
             user_email: this.row.user_email,
-            role: {
-              role_id: this.role.filter(res => this.row.role.role_name === res.role_name)[0].role_id,
-              role_name: this.row.role.role_name
-            }
+            role_id: this.role.filter(res => this.row.role.role_name === res.role_name)[0].role_id
+
           }
           updateUserInfo(data).then(res => {
             this.selectedEditRow.user_name = this.row.user_name

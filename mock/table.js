@@ -1,4 +1,5 @@
 const Mock = require('mockjs')
+const { config } = require('@vue/test-utils')
 
 const data = Mock.mock({
   'items|78': [{
@@ -36,6 +37,14 @@ const student = Mock.mock({
         'role_name|1': ['学生', '老师']
       }
     ]
+
+  }]
+})
+
+const college = Mock.mock({
+  'college|135': [{
+    id: 'AX4506',
+    name: '计算机与信息安全学院'
 
   }]
 })
@@ -79,6 +88,18 @@ module.exports = [
     }
   },
   {
+    url: '/api/college/count',
+    type: 'get',
+    response: config => {
+      return {
+        code: 20000,
+        message: '获取成功',
+        data: 135
+      }
+    }
+
+  },
+  {
     url: '/api/major/list',
     type: 'get',
     response: config => {
@@ -87,6 +108,27 @@ module.exports = [
         data: {
           items: major.major
         }
+      }
+    }
+  },
+
+  {
+    url: '/api/college/show\.*',
+    type: 'get',
+    response: config => {
+      const { pageNum, limit } = config.query
+      const newData = []
+      const off = parseInt(pageNum) - 1
+      const lim = parseInt(limit)
+      for (let index = off * 10; index < off * 10 + lim; index++) {
+        if (!college.college.length || index >= college.college.length) {
+          break
+        }
+        newData.push(college.college[index])
+      }
+      return {
+        code: 20000,
+        data: newData
       }
     }
   },

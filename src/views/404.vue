@@ -1,31 +1,31 @@
 <!-- 结构 在一个 容器下面 -->
 <template>
   <div>
-     <!-- 外层容器 -->
-        <div class="outer">
-            <div class="inner_photo_title clearfix">
-        		<!-- 设置图片 -->
-        		<div class="photo">
-        		    <img src="@/styles/images/404.png" alt="图片被吃掉啦o(╥﹏╥)o">
-        		</div>
-
-        		<!-- 设置标题 -->
-        		<div class="title">
-        			<img src="@/styles/images/404_6.png" alt="图片被吃掉啦o(╥﹏╥)o">
-        		</div>
-        	</div>
-
-            <!-- 设置报错信息 -->
-            <div class="info">
-                <h2>page not found</h2>
-                <p>您访问的页面不存在……</p>
-            </div>
-
-            <!-- 设置跳转首页按钮 -->
-            <div class="btn">
-                <a href="\">返回首页</a>
-            </div>
+    <!-- 外层容器 -->
+    <div class="outer">
+      <div class="inner_photo_title clearfix">
+        <!-- 设置图片 -->
+        <div class="photo">
+          <img src="@/styles/images/404.png" alt="图片被吃掉啦o(╥﹏╥)o">
         </div>
+
+        <!-- 设置标题 -->
+        <div class="title">
+          <img src="@/styles/images/404_6.png" alt="图片被吃掉啦o(╥﹏╥)o">
+        </div>
+      </div>
+
+      <!-- 设置报错信息 -->
+      <div class="info">
+        <h2>page not found</h2>
+        <p>您访问的页面不存在……</p>
+      </div>
+
+      <!-- 设置跳转首页按钮 -->
+      <div class="btn">
+        <a href="\">返回首页</a>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -49,13 +49,11 @@ export default {
 	clear: both;
 }
 
-
 body{
   height: 50%;
 	/* 全局背景色 */
 	background-color: #2F4055;
 }
-
 
 /* 设置外层容器样式 */
 .outer {
@@ -67,9 +65,9 @@ body{
 
 /* 设置装有图片和大标题的容器 */
 .inner_photo_title{
-	 width: 600px;
-	 padding: 10px;
-	 margin: 5px auto;
+width: 600px;
+padding: 10px;
+  margin: 5px auto;
 }
 
 /* 设置图片样式 */
@@ -114,10 +112,9 @@ body{
   }
 
   .info p{
-	  /* 块元素转为行内元素 */
-	  display: inline-block;
+ /* 块元素转为行内元素 */
+  display: inline-block;
   }
-
 
 /* 设置按钮样式 */
 .btn{
