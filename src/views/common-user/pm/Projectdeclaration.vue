@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { getProjectCategory } from '@/api/project'
 export default {
   data() {
     return {
@@ -75,7 +76,16 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getProjectCate()
+  },
   methods: {
+    getProjectCate() {
+      getProjectCategory().then(res => {
+        this.options = res.data
+        this.$message.success(res.message)
+      })
+    },
     addMember() {
       this.projectData.members.push({ value: '', key: new Date() })
     },

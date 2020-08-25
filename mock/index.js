@@ -4,11 +4,12 @@ const { param2Obj } = require('./utils')
 const user = require('./user')
 const table = require('./table') // 引入模块
 const major = require('./major')
-
+const project = require('./project')
 const mocks = [
   ...user,
   ...table,
-  ...major
+  ...major,
+  ...project
 ]
 
 // for front mock
