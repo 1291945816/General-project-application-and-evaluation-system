@@ -67,7 +67,7 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       // 根据用户名获取信息
-      getInfo('admin').then(response => {
+      getInfo('1800300916').then(response => {
         const { data } = response
         if (!data) {
           reject('验证失败，请重新登录')
