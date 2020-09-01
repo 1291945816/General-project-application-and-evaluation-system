@@ -52,7 +52,7 @@
       />
     </div>
 
-    <el-dialog title="通知详情" width="60%" :visible.sync="dialogTableVisible">
+    <el-dialog title="通知详情" width="60%" :visible.sync="dialogTableVisible" :close-on-click-modal="false">
       <div>
         <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> {{ applyTimestart }}至{{ applyTimeend }}</p>
         <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span>{{ applyYear }}</p>
