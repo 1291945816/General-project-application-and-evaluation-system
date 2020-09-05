@@ -16,7 +16,6 @@ const data = Mock.mock({
     content: '@cparagraph',
     url: 'https://static.runoob.com/images/demo/demo1.jpg',
     itemcategory: '国家级大创项目'
-
   }]
 })
 

@@ -29,17 +29,9 @@ service.interceptors.response.use(
 
   response => {
     const res = response.data
-    // if (res.code === 200) {
-    //   // 如果有认证头就加入到store中
-    //   if (response.headers['authorization']) {
-    //     store.commit('user/SET_TOKEN', response.headers['authorization'])
-    //     return res
-    //   }
-    // }
-
     if (res.code !== 20000) {
       Message({
-        message: res.message || 'Error',
+        message: '服务器错误,请联系后台管理员!',
         type: 'error',
         duration: 5 * 1000
       })
@@ -62,7 +54,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: '服务器错误，请联系后台管理员!',
       type: 'error',
       duration: 5 * 1000
     })
