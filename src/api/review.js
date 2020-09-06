@@ -11,6 +11,22 @@ export function ProjectNotReviewed(params) {
     params
   })
 }
+
+/**
+ *通过指定页码和每页的大小,该接口返回评审专家已评审的项目
+ * @param {*} params {pageNum: 页码,limit:限制条数}
+ */
+export function ProjectReviewed(params) {
+  return request({
+    url: '/api/review/getProjectsReviewed',
+    method: 'get',
+    params
+  })
+}
+/**
+ * 查看评审结果
+ */
+
 /**
  * 返回未评审的项目总数
  *
@@ -19,6 +35,27 @@ export function getNotReviewedCount() {
   return request({
     url: '/api/review/NotReviewedCount',
     method: 'get'
+  })
+}
+
+/**
+ * 返回已评审的项目总数
+ */
+export function getReviewedCount() {
+  return request({
+    url: '/api/review/ReviewedCount',
+    method: 'get'
+  })
+}
+
+/**
+ * 通过指定通知的Id  用于筛选返回的已评审项目
+ */
+export function ProjectReviewedByType(params) {
+  return request({
+    url: '/api/review/getReviewedByType',
+    method: 'get',
+    params
   })
 }
 
@@ -36,6 +73,40 @@ export function ProjectNotReviewedByType(params) {
 export function reviewResult(data) {
   return request({
     url: '/api/review/addResult',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 撤销评审
+ * @param {*} params
+ */
+export function undoReviewResult(params) {
+  return request({
+    url: '/api/review/del',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 获取查看评审
+ */
+export function getReviewResult(params) {
+  return request({
+    url: '/api/review/getResult',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 上传评审结果
+ */
+export function updateReviewResult(data) {
+  return request({
+    url: '/api/review/alterResult',
     method: 'post',
     data
   })

@@ -172,7 +172,7 @@ export default {
   }
 }
 </script>
-<style>
+<style >
   .tablemain{
     margin-top: 10px;
     margin-right: 10px;
