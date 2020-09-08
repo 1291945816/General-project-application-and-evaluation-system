@@ -111,3 +111,25 @@ export function updateReviewResult(data) {
     data
   })
 }
+
+/**
+ * 这个接口返回项目信息的数据
+ */
+export function getProjectInfoForReview(params) {
+  return request({
+    url: '/api/review/projectInfoForReview',
+    method: 'get',
+    params
+  })
+}
+
+/**
+  * 这个接口返回项目信息的数量
+  */
+export function getProjectCountForReview(params) {
+  return request({
+    url: '/api/review/projectCountForReview',
+    method: 'get',
+    params
+  })
+}

@@ -7,7 +7,12 @@
       <el-button type="info" @click="moreImport()">批量导入 <i class="el-icon-upload el-icon--right" /></el-button>
     </div>
     <div class="main">
-      <el-table :data="majorInfo" border stripe>
+      <el-table
+        :data="majorInfo"
+        border
+        stripe
+        max-height="500"
+      >
         <el-table-column
           v-for="col in columns"
           :key="col.id"
