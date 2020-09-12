@@ -133,3 +133,60 @@ export function getProjectCountForReview(params) {
     params
   })
 }
+/**
+ * 按项目ID设置评审专家
+ */
+
+export function setByProject(data) {
+  return request({
+    url: '/api/review/setByProject',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 按通知ID设置评审专家
+ */
+
+export function setByNotice(data) {
+  return request({
+    url: '/api/review/setByNotice',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 根据项目id返回评审专家的评审信息
+ */
+export function getResultAdmin(params) {
+  return request({
+    url: '/api/review/getResultAdmin',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 按通知ID删除所有评审专家
+ */
+
+export function deleteByNotice(data) {
+  return request({
+    url: '/api/review/deleteByNotice',
+    method: 'delete',
+    data
+  })
+}
+
+/**
+ * 按批量项目id删除所有评审专家
+ */
+export function deleteByProject(data) {
+  return request({
+    url: '/api/review/deleteByProject',
+    method: 'delete',
+    data
+  })
+}
