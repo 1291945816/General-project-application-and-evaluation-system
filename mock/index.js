@@ -6,12 +6,14 @@ const table = require('./table') // 引入模块
 const major = require('./major')
 const project = require('./project')
 const review = require('./review')
+const projectReview = require('./projectReview')
 const mocks = [
   ...user,
   ...table,
   ...major,
   ...project,
-  ...review
+  ...review,
+  ...projectReview
 ]
 
 // for front mock
