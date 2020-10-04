@@ -232,7 +232,7 @@ export default {
       this.visibel.import = true
     },
     InitMajorInfo(val) {
-      if (!this.search) {
+      if (this.search.replace(/\s*/g, '') === '') {
         getAllMajors({ pageNum: val, limit: 10 }).then(res => {
           this.majorInfo = res.data
           this.$message.success(res.message)

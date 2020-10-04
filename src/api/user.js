@@ -1,25 +1,22 @@
 import request from '@/utils/request'
 
+/**
+ * 用户登录
+ * @param {*} data
+ */
 export function login(data) {
   return request({
-    url: '/vue-admin-template/user/login',
+    url: '/login',
     method: 'post',
     data
   })
 }
 
-export function getInfo(user_id) {
+export function getInfo() {
   return request({
-    url: '/vue-admin-template/user/info',
-    method: 'get',
-    params: { user_id }
-  })
-}
+    url: '/api/user/info',
+    method: 'get'
 
-export function logout() {
-  return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
   })
 }
 

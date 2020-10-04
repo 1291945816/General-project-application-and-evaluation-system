@@ -16,21 +16,21 @@
       >
 
         <el-table-column
-          prop="id"
+          prop="notice_id"
           label="通知ID"
           width="200"
         />
         <el-table-column
-          prop="title"
+          prop="notice_title"
           label="标题"
         />
         <el-table-column
-          prop="publicDate"
+          prop="publish_time"
           label="发布时间"
-          width="190"
+          width="250"
         />
         <el-table-column
-          prop="publicPerson"
+          prop="publish_person"
           label="发布人"
           width="200"
         />
@@ -61,12 +61,12 @@
     <!-- 通知详情 -->
     <el-dialog title="通知详情" width="60%" :visible.sync="dialogTableVisible">
       <div>
-        <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> {{ applyTimestart }}至{{ applyTimeend }}</p>
-        <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span>{{ applyYear }}</p>
-        <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> {{ reviewTimestart }}至{{ reviewTimeend }}</p>
-        <p style="font-size: 18px;margin-bottom: 5px;"><span style="font-weight:bold">项目类别:</span> {{ itemcategory }}</p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> {{ applytimestart }}至{{ applytimeend }}</p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span>{{ annual }}</p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> {{ reviewtimestart }}至{{ reviewtimeend }}</p>
+        <p style="font-size: 18px;margin-bottom: 5px;"><span style="font-weight:bold">项目类别:</span> {{ notice_item_name }}</p>
         <hr>
-        <p class="content" v-html="content" />
+        <p class="content" v-html="notice_content" />
       </div>
     </el-dialog>
     <!-- 通知编辑 -->
@@ -222,7 +222,7 @@
 
 <script>
 import tinymce from '@/components/Ty-editor.vue'
-import { getList, getcount } from '@/api/table'
+import { getNotificationList, getNotificationcount } from '@/api/notification'
 export default {
   name: 'Notification',
   components: {
@@ -261,13 +261,13 @@ export default {
       tableData: [],
       dialogTableVisible: false,
       editVisible: false,
-      applyTimestart: '',
-      applyTimeend: '',
-      applyYear: '',
-      reviewTimestart: '',
-      reviewTimeend: '',
-      content: '',
-      itemcategory: '大创项目',
+      applytimestart: '',
+      applytimeend: '',
+      annual: '',
+      reviewtimestart: '',
+      reviewtimeend: '',
+      notice_content: '',
+      notice_item_name: '大创项目',
       editValue: null, // 编辑的行,
       loading: null,
       mulTable: [],
@@ -365,29 +365,29 @@ export default {
     },
     getData(val) {
       var params = {
-        offist: val,
+        pageNum: val,
         limit: 10
 
       }
       // 获取数据
-      getList(params).then(response => {
-        this.tableData = response.data.items
+      getNotificationList(params).then(response => {
+        this.tableData = response.data
       })
     },
     // 获取总的数据数
     getTotal() {
-      getcount().then(res => {
-        this.totalnum = res.data.count
+      getNotificationcount().then(res => {
+        this.totalnum = parseInt(res.data.count)
       })
     },
     deatail(value) {
-      this.applyTimestart = value.applyTimestart
-      this.applyTimeend = value.applyTimeend
-      this.applyYear = value.applyYear
-      this.content = value.content
-      this.reviewTimestart = value.reviewTimestart
-      this.reviewTimeend = value.reviewTimeend
-      this.itemcategory = value.itemcategory
+      this.applytimestart = value.applytimestart
+      this.applytimeend = value.applytimeend
+      this.annual = value.annual
+      this.notice_content = value.notice_content
+      this.reviewtimestart = value.reviewtimestart
+      this.reviewtimeend = value.reviewtimeend
+      this.notice_item_name = value.notice_item_name
       this.dialogTableVisible = true
     },
     edit(value) {

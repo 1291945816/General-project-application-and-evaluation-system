@@ -1,5 +1,4 @@
 const Mock = require('mockjs')
-const { config } = require('@vue/test-utils')
 
 const data = Mock.mock({
   'items|78': [{

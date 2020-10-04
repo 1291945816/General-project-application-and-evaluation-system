@@ -1,7 +1,6 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-
 const getDefaultState = () => {
   return {
     token: getToken(),
@@ -53,9 +52,9 @@ const actions = {
       login({ username: username.trim(), password: password }).then(response => {
         // 这说明登陆成功了
         const { data } = response
-        commit('SET_TOKEN', data.token)
-
-        setToken(data.token) // 记得保存token
+        commit('SET_TOKEN', data)
+        // console.log(data)
+        setToken(data) // 保存token
         resolve()
       }).catch(error => {
         reject(error)
@@ -67,22 +66,22 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       // 根据用户名获取信息
-      getInfo('admin').then(response => {
+      getInfo().then(response => {
         const { data } = response
         if (!data) {
           reject('验证失败，请重新登录')
         }
-        const { user_id, menus, user_name, user_phone, user_email, user_major } = data
+        const { menus, userinfo } = data
         if (menus === null) {
           console.log('输出为null')
         }
         menus.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_MENUS', menus)
-        commit('SET_USER_ID', user_id) // 存入用户名
-        commit('SET_USER_NAME', user_name)
-        commit('SET_USER_PHONE', user_phone)
-        commit('SET_USER_EMAIL', user_email)
-        commit('SET_USER_MAJOR', user_major)
+        commit('SET_USER_ID', userinfo.user_no) // 存入用户名
+        commit('SET_USER_NAME', userinfo.user_name)
+        commit('SET_USER_PHONE', userinfo.user_phone)
+        commit('SET_USER_EMAIL', userinfo.user_email)
+        commit('SET_USER_MAJOR', userinfo.major)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -93,14 +92,10 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      removeToken() // must remove  token  first
+      resetRouter()
+      commit('RESET_STATE')
+      resolve()
     })
   },
 

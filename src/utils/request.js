@@ -29,9 +29,10 @@ service.interceptors.response.use(
 
   response => {
     const res = response.data
-    if (res.code !== 20000) {
+    console.log(res.code)
+    if (res.code !== 200) {
       Message({
-        message: '服务器错误,请联系后台管理员!',
+        message: '服务器错误，请联系后台管理员',
         type: 'error',
         duration: 5 * 1000
       })
@@ -54,7 +55,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // for debug
     Message({
-      message: '服务器错误，请联系后台管理员!',
+      message: error.message,
       type: 'error',
       duration: 5 * 1000
     })
