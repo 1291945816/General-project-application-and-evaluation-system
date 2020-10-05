@@ -32,7 +32,7 @@ service.interceptors.response.use(
     console.log(res.code)
     if (res.code !== 200) {
       Message({
-        message: '服务器错误，请联系后台管理员',
+        message: res.message,
         type: 'error',
         duration: 5 * 1000
       })

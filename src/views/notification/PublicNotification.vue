@@ -61,9 +61,9 @@
     <!-- 通知详情 -->
     <el-dialog title="通知详情" width="60%" :visible.sync="dialogTableVisible">
       <div>
-        <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> {{ applytimestart }}至{{ applytimeend }}</p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> {{ applytimestart }} 至 {{ applytimeend }}</p>
         <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span>{{ annual }}</p>
-        <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> {{ reviewtimestart }}至{{ reviewtimeend }}</p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> {{ reviewtimestart }} 至 {{ reviewtimeend }}</p>
         <p style="font-size: 18px;margin-bottom: 5px;"><span style="font-weight:bold">项目类别:</span> {{ notice_item_name }}</p>
         <hr>
         <p class="content" v-html="notice_content" />
@@ -222,7 +222,7 @@
 
 <script>
 import tinymce from '@/components/Ty-editor.vue'
-import { getNotificationList, getNotificationcount } from '@/api/notification'
+import { getNotificationList, getNotificationcount, upNotificationInfo, deleteNotificationInfo } from '@/api/notification'
 export default {
   name: 'Notification',
   components: {
@@ -351,10 +351,11 @@ export default {
     },
     // 删除一行
     deleteRows(index, id) {
-      // 先向数据库进行删除
-      this.$message.success('删除成功')
-      console.log(id)
-      this.tableData.splice(index, 1) // 删除一行
+      deleteNotificationInfo(id).then(res => {
+        // 先向数据库进行删除
+        this.$message.success(res.message)
+        this.tableData.splice(index, 1) // 删除一行
+      })
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
@@ -382,6 +383,7 @@ export default {
     },
     deatail(value) {
       this.applytimestart = value.applytimestart
+      console.log(this.applytimestart)
       this.applytimeend = value.applytimeend
       this.annual = value.annual
       this.notice_content = value.notice_content
@@ -391,13 +393,13 @@ export default {
       this.dialogTableVisible = true
     },
     edit(value) {
-      this.ruleFormEdit.id = value.id
-      this.ruleFormEdit.applyTime = [value.applyTimestart, value.applyTimeend]
-      this.ruleFormEdit.title = value.title
-      this.ruleFormEdit.reviewTime = [value.reviewTimestart, value.reviewTimeend]
-      this.ruleFormEdit.applyYear = value.applyYear
-      this.ruleFormEdit.content = value.content
-      this.ruleFormEdit.itemcategory = value.itemcategory
+      this.ruleFormEdit.id = value.notice_id
+      this.ruleFormEdit.applyTime = [value.applytimestart, value.applytimeend]
+      this.ruleFormEdit.title = value.notice_title
+      this.ruleFormEdit.reviewTime = [value.reviewtimestart, value.reviewtimeend]
+      this.ruleFormEdit.applyYear = value.annual
+      this.ruleFormEdit.content = value.notice_content
+      this.ruleFormEdit.itemcategory = value.notice_item_name
       this.editValue = value
 
       this.editVisible = true
@@ -437,21 +439,32 @@ export default {
       this.$refs['ruleFormEdit'].validate((vald) => {
         if (vald) {
           // 更新表单的值 并向数据库发起请求
-          // 应该等数据库的请求返回时再修改
-          this.editValue.id = this.ruleFormEdit.id
-          this.editValue.applyTimestart = this.ruleFormEdit.applyTime[0]
-          this.editValue.applyTimeend = this.ruleFormEdit.applyTime[1]
-          this.editValue.title = this.ruleFormEdit.title
-          this.editValue.reviewTimestart = this.ruleFormEdit.reviewTime[0]
-          this.editValue.reviewTimeend = this.ruleFormEdit.reviewTime[1]
-          this.editValue.applyYear = this.ruleFormEdit.applyYear
-          this.editValue.content = this.ruleFormEdit.content
-          this.editValue.itemcategory = this.ruleFormEdit.itemcategory
+          upNotificationInfo({
+            id: this.ruleFormEdit.id,
+            applyTimestart: this.ruleFormEdit.applyTime[0],
+            applyTimeend: this.ruleFormEdit.applyTime[1],
+            title: this.ruleFormEdit.title,
+            reviewTimestart: this.ruleFormEdit.reviewTime[0],
+            reviewTimeend: this.ruleFormEdit.reviewTime[1],
+            applyYear: this.ruleFormEdit.applyYear,
+            content: this.ruleFormEdit.content,
+            itemcategory: this.ruleFormEdit.itemcategory,
+            visiablePerson: this.ruleFormEdit.visiablePerson
+          }).then(res => {
+            // 应该等数据库的请求返回时再修改
+            this.editValue.id = this.ruleFormEdit.id
+            this.editValue.applyTimestart = this.ruleFormEdit.applyTime[0]
+            this.editValue.applyTimeend = this.ruleFormEdit.applyTime[1]
+            this.editValue.title = this.ruleFormEdit.title
+            this.editValue.reviewTimestart = this.ruleFormEdit.reviewTime[0]
+            this.editValue.reviewTimeend = this.ruleFormEdit.reviewTime[1]
+            this.editValue.applyYear = this.ruleFormEdit.applyYear
+            this.editValue.content = this.ruleFormEdit.content
+            this.editValue.itemcategory = this.ruleFormEdit.itemcategory
+            this.editVisible = false
+            this.$message.success(res.message)
+          })
           this.loading = false
-          this.editVisible = false
-          console.log(this.ruleFormEdit.visiablePerson) // 可见人
-
-          this.$message.success('更新成功')
         } else {
           this.loading = false
           this.$message.error('请按要求完善表单信息')

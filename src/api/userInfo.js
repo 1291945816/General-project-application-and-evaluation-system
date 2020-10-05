@@ -2,7 +2,7 @@ import request from '@/utils/request'
 export function getUserInfo(params) {
   return request({
     // 请求用户信息
-    url: '/vue-admin-template/user/list',
+    url: '/api/user/list',
     type: 'get',
     params
   })
@@ -11,15 +11,16 @@ export function getUserInfo(params) {
 // 获取列表总数
 export function getcount() {
   return request({
-    url: '/vue-admin-template/table/count',
+    url: '/api/user/count',
     method: 'get'
   })
 }
 // 获取所有专业
-export function getAllMajor() {
+export function getAllMajor(params) {
   return request({
-    url: '/api/major/list',
-    method: 'get'
+    url: '/api/major/show',
+    method: 'get',
+    params
   })
 }
 

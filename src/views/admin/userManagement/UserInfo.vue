@@ -77,13 +77,13 @@
         <el-form-item label="密码">
           <el-input v-model="row.user_password" type="password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="专业" prop="major.major_name">
-          <el-select v-model="row.major.major_name" placeholder="请选择专业">
+        <el-form-item label="专业" prop="major.name">
+          <el-select v-model="row.major.name" placeholder="请选择专业">
             <el-option
               v-for="item in major"
-              :key="item.major_id"
-              :label="item.major_name"
-              :value="item.major_name"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
             />
           </el-select>
         </el-form-item>
@@ -190,7 +190,7 @@ export default {
   data() {
     return {
       studentInfo: [],
-      total: 1000,
+      total: 0,
       major: [],
       search_data: '',
       role: [], // 角色列表
@@ -204,8 +204,8 @@ export default {
         user_id: '',
         user_name: '',
         major: {
-          major_id: '',
-          major_name: ''
+          id: '',
+          name: ''
         },
         user_password: '',
         user_email: '',
@@ -318,7 +318,7 @@ export default {
           limit: 10
         }
         getUserInfo(params).then((res) => {
-          this.studentInfo = res.data.items
+          this.studentInfo = res.data
           this.$message.success('获取成功')
         }).catch((error) => {
           this.$message.error(error)
@@ -327,7 +327,7 @@ export default {
     },
     getTotal() {
       getcount().then((res) => {
-        this.total = res.data.count
+        this.total = parseInt(res.data.total)
       }).catch((error) => {
         this.$message.error(error)
       })
@@ -341,19 +341,20 @@ export default {
       this.row.user_phone = value.user_phone
       this.row.user_email = value.user_email
       this.row.role = value.role
-      this.row.major = value.major
+      this.row.major.id = value.major.major_id
+      this.row.major.name = value.major.major_name
       this.selectedEditRow = value
     },
     getMajor() {
-      getAllMajor().then(res => {
-        this.major = res.data.items
+      getAllMajor({ pageNum: 1, limit: -1 }).then(res => {
+        this.major = res.data
       }).catch((error) => {
         this.$message.error(error)
       })
     },
     getRole() {
       getAllRole().then(res => {
-        this.role = res.data.role
+        this.role = res.data
       }).catch((error) => {
         this.$message.error(error)
       })
@@ -391,9 +392,17 @@ export default {
     },
     // 删除用户信息
     deleteStu(index, user_id) {
-      delUserInfo(user_id).then(res => {
-        this.$message.success(res.message)
-        this.studentInfo.splice(index, 1)
+      this.$confirm('此操作会删除相对应的用户，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delUserInfo(user_id).then(res => {
+          this.$message.success(res.message)
+          this.studentInfo.splice(index, 1)
+        })
+      }).catch(() => {
+        this.$message.info('取消成功')
       })
     }
   }
