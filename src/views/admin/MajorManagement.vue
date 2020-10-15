@@ -247,7 +247,8 @@ export default {
     InitMajorCount() {
       getMajorCount().then(res => {
         this.total = res.data
-        this.$message.success(res.message)
+        console.log(res.message)
+        // this.$message.success(res.message)
       })
     }
 

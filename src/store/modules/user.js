@@ -81,7 +81,7 @@ const actions = {
         commit('SET_USER_NAME', userinfo.user_name)
         commit('SET_USER_PHONE', userinfo.user_phone)
         commit('SET_USER_EMAIL', userinfo.user_email)
-        commit('SET_USER_MAJOR', userinfo.major)
+        commit('SET_USER_MAJOR', userinfo.user_major)
         resolve(data)
       }).catch(error => {
         reject(error)

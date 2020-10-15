@@ -43,7 +43,7 @@
             <el-button type="primary" size="small" @click="deatail(scope.row)">查看</el-button>
             <el-button size="small" @click="fileHandle(scope.row)">文件</el-button>
             <el-button type="success" size="small" @click="edit(scope.row)">编辑</el-button>
-            <el-button type="danger" size="small" @click="deleteRows(scope.$index,scope.row.id)">删除</el-button>
+            <el-button type="danger" size="small" @click="deleteRows(scope.$index,scope.row.notice_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -222,7 +222,7 @@
 
 <script>
 import tinymce from '@/components/Ty-editor.vue'
-import { getNotificationList, getNotificationcount, upNotificationInfo, deleteNotificationInfo } from '@/api/notification'
+import { getNotificationList, getNotificationcount, upNotificationInfo, deleteNotificationInfo, newNotificationInfo } from '@/api/notification'
 export default {
   name: 'Notification',
   components: {
@@ -325,19 +325,35 @@ export default {
       this.$refs['newNotice'].validate((vald) => {
         if (vald) {
           this.$message.success('校验成功')
+          const data = {
+            id: this.newNotice.id,
+            applyTimestart: this.newNotice.applyTime[0],
+            applyTimeend: this.newNotice.applyTime[1],
+            title: this.newNotice.title,
+            reviewTimestart: this.newNotice.reviewTime[0],
+            reviewTimeend: this.newNotice.reviewTime[1],
+            applyYear: this.newNotice.applyYear,
+            content: this.newNotice.content,
+            itemcategory: this.newNotice.itemcategory,
+            visiablePerson: this.newNotice.visiablePerson
+          }
 
           // 这里发起增加通知的请求
-
-          // 成功了就清空原内容
-          this.newNotice.id = ''
-          this.newNotice.title = ''
-          this.newNotice.applyTime = []
-          this.newNotice.reviewTime = []
-          this.newNotice.applyYear = ''
-          this.newNotice.itemcategory = ''
-          this.newNotice.content = '编辑通知正文'
-          this.newNotice.visiablePerson = ''
-          this.newNotice.Visible = false
+          newNotificationInfo(data).then(
+            res => {
+              this.$message.success(res.message)
+              // 成功了就清空原内容
+              this.newNotice.id = ''
+              this.newNotice.title = ''
+              this.newNotice.applyTime = []
+              this.newNotice.reviewTime = []
+              this.newNotice.applyYear = ''
+              this.newNotice.itemcategory = ''
+              this.newNotice.content = '编辑通知正文'
+              this.newNotice.visiablePerson = ''
+              this.newNotice.Visible = false
+            }
+          )
         } else {
           this.$message.error('提交被拒绝了,通知内容不完善')
         }
@@ -351,6 +367,7 @@ export default {
     },
     // 删除一行
     deleteRows(index, id) {
+      console.log(id)
       deleteNotificationInfo(id).then(res => {
         // 先向数据库进行删除
         this.$message.success(res.message)

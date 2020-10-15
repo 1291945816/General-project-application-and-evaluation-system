@@ -38,7 +38,7 @@ export function getInfoAndMenu() {
 export function updateUserInfo(data) {
   return request({
     url: '/api/user/info',
-    type: 'post',
+    method: 'post',
     data
 
   })
@@ -50,8 +50,8 @@ export function updateUserInfo(data) {
 export function updatePassword(data) {
   return request(
     {
-      url: '',
-      type: 'post',
+      url: '/api/user/password',
+      method: 'post',
       data
     }
   )

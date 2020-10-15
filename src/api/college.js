@@ -61,10 +61,10 @@ export function deleteCollegeInfo(params) {
  * 搜索学院的信息
  * @param {*} params
  */
-export function SearchCollegeInfo(params) {
+export function SearchCollegeInfo(data) {
   return request({
     url: '/api/college/searchInfo',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }

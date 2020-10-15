@@ -1,10 +1,12 @@
 <template>
   <div class="dowebok">
+
     <div class="container-login100">
       <div class="wrap-login100">
         <div class="login100-pic js-tilt" data-tilt>
           <img src="../../styles/images/img-01.png" alt="IMG">
         </div>
+
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login100-form validate-form" auto-complete="on" label-position="left">
           <span class="login100-form-title1">
             通用项目评审与申报系统
@@ -81,6 +83,7 @@ export default {
       }
     }
     return {
+      msg: '系统维护中...',
       loginForm: {
         username: '1800300916',
         password: '123456'

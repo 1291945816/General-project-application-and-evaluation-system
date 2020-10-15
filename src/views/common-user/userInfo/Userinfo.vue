@@ -58,7 +58,7 @@
         round
         class="saveprofile"
         element-loading-spinner="el-icon-loading"
-        @click="saveProps('FormData')"
+        @click="saveProps()"
       >
         保存
       </el-button>
@@ -94,6 +94,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { updateUserInfo, updatePassword } from '@/api/user'
 export default {
   name: 'UserInfo',
 
@@ -137,7 +138,7 @@ export default {
         ],
         emailnum: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的手机号', trigger: 'blur' }
+          { type: 'email', message: '请输入正确的邮箱', trigger: 'blur' }
         ],
         oldpassword: [
           { required: true, message: '请输入旧密码', trigger: 'blur' }
@@ -173,18 +174,20 @@ export default {
       this.FormData.emailnum = this.$store.getters.user_email
     },
     // 用于保存用户的信息
-    saveProps(FormData) {
+    saveProps() {
       // 这个用于加载
       this.loading = false
       // 验证有效的话就进行更新
-      this.$refs[FormData].validate((valid) => {
+      this.$refs['FormData'].validate((valid) => {
         if (valid) {
-          this.$message.success('成功了')
-          // 修改vuex的信息
-          // this.$store.commit('user/SET_USER_PHONE', '123')
-          // this.FormData.phonenum = '123'
-
-          console.log(this.FormData)
+          updateUserInfo({
+            'user_phone': this.FormData.phonenum,
+            'user_email': this.FormData.emailnum
+          }).then(res => {
+            this.$store.commit('user/SET_USER_PHONE', this.FormData.phonenum)
+            this.$store.commit('user/SET_USER_EMAIL', this.FormData.emailnum)
+            this.$message.success(res.message)
+          })
         } else {
           this.$message.error('成功了')
           return false
@@ -195,7 +198,12 @@ export default {
     changepassword() {
       this.$refs['passwordChange'].validate((valid) => {
         if (valid) {
-          this.$message.success('提交成功')
+          updatePassword({
+            oldpassword: this.passwordChange.oldpassword,
+            newpassword: this.passwordChange.newpassword
+          }).then(res => {
+            this.$message.success(res.message)
+          })
         } else {
           this.$message.error('提交失败')
         }
