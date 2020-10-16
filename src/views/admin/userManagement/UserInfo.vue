@@ -257,10 +257,10 @@ export default {
     // 支持模糊查找
     search() {
       if (!this.search_data) return
-      searchUser({ user_id: this.search_data, pageNum: 1, limit: 10 }).then(res => {
+      searchUser({ user_id: this.search_data, pageNum: 0, limit: 10 }).then(res => {
         console.log(res.data)
-        this.studentInfo = res.data.res
-        this.total = res.data.res.length
+        this.studentInfo = res.data
+        this.total = res.data.length
       })
     },
     uploaderror(res) {

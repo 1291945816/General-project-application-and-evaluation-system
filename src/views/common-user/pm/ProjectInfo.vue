@@ -30,7 +30,7 @@
               <el-form-item label="指导老师">
 
                 <br>
-                <el-card shadow="always" class="wrap" style="width: 300px;margin-left: 35px;">
+                <el-card v-if="props.row.project_teacher !== ''" shadow="always" class="wrap" style="width: 300px;margin-left: 35px;">
                   <span>{{ "学号："+props.row.project_teacher.id }} </span><br>
                   <span>{{ " 姓名："+props.row.project_teacher.name }} </span> <br>
                   <span>{{ " 邮箱："+props.row.project_teacher.email }} </span> <br>
@@ -193,10 +193,11 @@ export default {
 
     }
   },
-  mounted() {
+  created() {
     this.getCategorys()
-    getProjectInfo({ pageNum: 1, limit: 10 }).then(res => {
+    getProjectInfo({ pageNum: 0, limit: 10 }).then(res => {
       this.ProjectInfo = res.data
+      console.log(this.ProjectInfo)
     })
     // 通知
     const h = this.$createElement
@@ -267,11 +268,12 @@ export default {
     // 下方分页的一个处理
     handle(val) {
       if (this.searchCondition) {
-        searchByCondition({ pageNum: val, type: this.searchCondition, limit: '10' }).then(res => {
-          this.projectData = res.data
+        searchByCondition({ pageNum: val - 1, type: this.searchCondition, limit: '10' }).then(res => {
+          this.ProjectInfo = res.data
+          this.$message.success(res.message)
         })
       } else {
-        getProjectInfo({ pageNum: val, limit: 10 }).then(res => {
+        getProjectInfo({ pageNum: val - 1, limit: 10 }).then(res => {
           this.ProjectInfo = res.data
         })
       }

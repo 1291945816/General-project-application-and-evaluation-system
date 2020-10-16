@@ -124,6 +124,11 @@ export default {
           this.loading = true
           // 校验是否通过 this.loginForm
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            const h = this.$createElement
+            this.$notify.info({
+              title: '友情提示',
+              message: h('i', { style: 'color: teal' }, '欢迎您，请刷新一下界面，以便获取更好的用户体验')
+            })
             this.$router.push('/') // 登陆成功后重定向到通知页
             this.loading = false
           }).catch(() => {

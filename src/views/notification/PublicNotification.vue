@@ -61,10 +61,10 @@
     <!-- 通知详情 -->
     <el-dialog title="通知详情" width="60%" :visible.sync="dialogTableVisible">
       <div>
-        <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> {{ applytimestart }} 至 {{ applytimeend }}</p>
-        <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span>{{ annual }}</p>
-        <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> {{ reviewtimestart }} 至 {{ reviewtimeend }}</p>
-        <p style="font-size: 18px;margin-bottom: 5px;"><span style="font-weight:bold">项目类别:</span> {{ notice_item_name }}</p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span>  <el-tag style="margin-left: 10px;" effect="plain" type="warning">{{ applytimestart }}</el-tag> 至 <el-tag effect="plain" type="warning">{{ applytimeend }} </el-tag></p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span> <el-tag style="margin-left: 10px;" type="warning">{{ annual }}</el-tag></p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> <el-tag style="margin-left: 10px;" effect="plain" type="danger">{{ reviewtimestart }}</el-tag> 至 <el-tag effect="plain" type="danger">{{ reviewtimeend }} </el-tag></p>
+        <p style="font-size: 18px;margin-bottom: 5px;"><span style="font-weight:bold">项目类别:</span><el-tag style="margin-left: 10px;" type="success">{{ notice_item_name }}</el-tag></p>
         <hr>
         <p class="content" v-html="notice_content" />
       </div>
@@ -221,6 +221,7 @@
   </div></template>
 
 <script>
+import { formatDate } from '@/utils/timeHandle'
 import tinymce from '@/components/Ty-editor.vue'
 import { getNotificationList, getNotificationcount, upNotificationInfo, deleteNotificationInfo, newNotificationInfo } from '@/api/notification'
 export default {
@@ -294,8 +295,8 @@ export default {
       ruleFormEdit: {
         id: '',
         title: '',
-        applyTime: ['2020-08-13 12:30:20', '2020-08-14 14:50:23'],
-        reviewTime: Date(),
+        applyTime: [],
+        reviewTime: [],
         applyYear: '',
         itemcategory: '',
         content: '编辑内容',
@@ -359,7 +360,6 @@ export default {
         }
         this.newNotice.addloading = false
       })
-      console.log()
     },
     refresh() {
       this.getData(1)
@@ -390,6 +390,9 @@ export default {
       // 获取数据
       getNotificationList(params).then(response => {
         this.tableData = response.data
+        for (let i = 0; i < this.tableData.length; ++i) {
+          this.tableData[i].publish_time = formatDate(new Date(this.tableData[i].publish_time), 2)
+        }
       })
     },
     // 获取总的数据数
@@ -399,25 +402,27 @@ export default {
       })
     },
     deatail(value) {
-      this.applytimestart = value.applytimestart
-      console.log(this.applytimestart)
-      this.applytimeend = value.applytimeend
+      this.applytimestart = formatDate(new Date(value.applytimestart), 2)
+      this.applytimeend = formatDate(new Date(value.applytimeend), 2)
       this.annual = value.annual
       this.notice_content = value.notice_content
-      this.reviewtimestart = value.reviewtimestart
-      this.reviewtimeend = value.reviewtimeend
+      this.reviewtimestart = formatDate(new Date(value.reviewtimestart), 2)
+      this.reviewtimeend = formatDate(new Date(value.reviewtimeend), 2)
       this.notice_item_name = value.notice_item_name
       this.dialogTableVisible = true
     },
     edit(value) {
       this.ruleFormEdit.id = value.notice_id
-      this.ruleFormEdit.applyTime = [value.applytimestart, value.applytimeend]
+      this.ruleFormEdit.applyTime = [new Date(value.applytimestart), new Date(value.applytimeend)]
       this.ruleFormEdit.title = value.notice_title
-      this.ruleFormEdit.reviewTime = [value.reviewtimestart, value.reviewtimeend]
+      var time = new Date(value.reviewtimeend)
+      console.log(time)
+      this.ruleFormEdit.reviewTime = [new Date(value.reviewtimestart), new Date(value.reviewtimeend)]
       this.ruleFormEdit.applyYear = value.annual
       this.ruleFormEdit.content = value.notice_content
       this.ruleFormEdit.itemcategory = value.notice_item_name
       this.editValue = value
+      this.ruleFormEdit.visiablePerson = value.visible
 
       this.editVisible = true
     },
@@ -458,11 +463,11 @@ export default {
           // 更新表单的值 并向数据库发起请求
           upNotificationInfo({
             id: this.ruleFormEdit.id,
-            applyTimestart: this.ruleFormEdit.applyTime[0],
-            applyTimeend: this.ruleFormEdit.applyTime[1],
+            applyTimestart: formatDate(this.ruleFormEdit.applyTime[0], 2),
+            applyTimeend: formatDate(this.ruleFormEdit.applyTime[1], 2),
             title: this.ruleFormEdit.title,
-            reviewTimestart: this.ruleFormEdit.reviewTime[0],
-            reviewTimeend: this.ruleFormEdit.reviewTime[1],
+            reviewTimestart: formatDate(this.ruleFormEdit.reviewTime[0], 2),
+            reviewTimeend: formatDate(this.ruleFormEdit.reviewTime[1], 2),
             applyYear: this.ruleFormEdit.applyYear,
             content: this.ruleFormEdit.content,
             itemcategory: this.ruleFormEdit.itemcategory,
