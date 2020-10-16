@@ -107,6 +107,7 @@
         class="upload-demo"
         drag
         accept=".xls,.xlsx"
+        :headers="headers"
         :action="action"
         :limit="1"
       >
@@ -119,15 +120,17 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/utils/auth'
 import { getMajorCount, getAllMajors, updateMajorInfo, addMajorInfo, deleteMajorInfo, getMajorInfoByCollege } from '@/api/major'
 import { getCollegeInfo } from '@/api/college'
 export default {
   data() {
     return {
-      action: 'api/major/upload', // 上传的目标地址,
-      href: '', // 模板的下载地址
+      action: 'http://localhost:61000/api/import/majors', // 上传的目标地址,
+      href: 'http://print.kilig.ink/%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E4%B8%93%E4%B8%9A%E6%A8%A1%E6%9D%BF.xlsx', // 模板的下载地址
       total: 100,
       search: '',
+      headers: {},
       newInfo: {
         id: '',
         name: '',
@@ -158,6 +161,7 @@ export default {
   created() {
     this.InitMajorInfo(1)
     this.InitMajorCount()
+    this.headers = { Authorization: getToken() }
   },
   methods: {
     // 删除专业信息

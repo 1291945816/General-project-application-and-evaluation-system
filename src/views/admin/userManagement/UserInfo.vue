@@ -127,12 +127,12 @@
           <el-input v-model="newrow.user_password" type="password" autocomplete="off" />
         </el-form-item>
         <el-form-item label="专业" prop="major.major_name">
-          <el-select v-model="newrow.major.major_name" placeholder="请选择专业">
+          <el-select v-model="newrow.major.name" placeholder="请选择专业">
             <el-option
               v-for="item in major"
-              :key="item.major_id"
-              :label="item.major_name"
-              :value="item.major_name"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
             />
           </el-select>
         </el-form-item>
@@ -166,13 +166,12 @@
     >
       <div class="upload">
         <el-upload
-          class="upload-demo"
           drag
           accept=".xls,.xlsx"
           :action="action"
+          :headers="headers"
           :on-success="uploadsuccess"
           :on-error="uploaderror"
-
           multiple
         >
           <i class="el-icon-upload" />
@@ -185,6 +184,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/utils/auth'
 import { getUserInfo, getcount, getAllMajor, searchUser, addUserInfo, updateUserInfo, delUserInfo, getAllRole } from '@/api/userInfo'
 export default {
   data() {
@@ -198,7 +198,8 @@ export default {
       newVisiable: false,
       major_id: '',
       uploadVisiable: false,
-      action: '/api/importUsers',
+      headers: {},
+      action: 'http://localhost:61000/api/import/users',
       href: 'http://print.kilig.ink/%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E7%94%A8%E6%88%B7%E6%A8%A1%E6%9D%BF.xlsx', // 模板表
       row: {
         user_id: '',
@@ -237,7 +238,7 @@ export default {
         user_id: [{ required: true, message: '学号不能够为空', trriger: 'blur' }],
         user_name: [{ required: true, message: '用户名不能够为空', trriger: 'blur' }],
         major: {
-          major_name: [{ required: true, message: '专业不能够为空', trriger: 'blur' }]
+          name: [{ required: true, message: '专业不能够为空', trriger: 'blur' }]
         },
         user_password: [{ required: true, message: '密码不能够为空', trriger: 'blur' }],
         role: {
@@ -250,6 +251,7 @@ export default {
   created() {
     this.getData(1)
     this.getTotal()
+    this.headers = { Authorization: getToken() }
   },
   methods: {
     // 支持模糊查找
@@ -262,7 +264,7 @@ export default {
       })
     },
     uploaderror(res) {
-      this.$message.error('上传失败')
+      this.$message.error('上传失败,请检查上传的文件是否符合要求的格式')
     },
     uploadsuccess() {
       this.$message.success('上传成功')
@@ -275,7 +277,7 @@ export default {
             user_id: this.newrow.user_id,
             user_name: this.newrow.user_name,
             user_password: this.newrow.user_password,
-            major_id: this.major.filter(item => this.newrow.major.major_name === item.major_name)[0].major_id,
+            major_id: this.major.filter(item => this.newrow.major.name === item.name)[0].id,
             user_phone: this.newrow.user_phone,
             user_email: this.newrow.user_email,
             role_id: this.role.filter(res => this.newrow.role.role_name === res.role_name)[0].role_id

@@ -113,8 +113,8 @@ export default {
         if (val) {
           applyProject(data).then(res => {
             this.$message.success(res.message)
+            this.$message.success('提交成功，若需提交附件，请在项目信息模块进行上传')
           })
-          this.$message.success('提交成功，若需提交附件，请在项目信息模块进行上传')
         } else {
           this.$message.error('请完善申报表的信息')
         }

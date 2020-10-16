@@ -77,6 +77,7 @@
         :action="action"
         multiple
         :limit="1"
+        :headers="headers"
         accept=".xls,.xlsx"
       >
         <i class="el-icon-upload" />
@@ -97,13 +98,15 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/utils/auth'
 import { getCollegeInfo, getCollegecount, updateCollegeInfo, addCollegeInfo, deleteCollegeInfo, SearchCollegeInfo } from '@/api/college'
 export default {
   data() {
     return {
-      action: '/api/college/upload', // 文件上传目的地,
-      href: '', // 模板下载连接
+      action: 'http://localhost:61000/api/import/colleges', // 文件上传目的地,
+      href: 'http://print.kilig.ink/%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E5%AD%A6%E9%99%A2%E6%A8%A1%E6%9D%BF.xlsx', // 模板下载连接
       selectedRow: null, // 编辑行
+      headers: {},
       visible: {
         edit: false,
         new: false,
@@ -129,6 +132,7 @@ export default {
   }, created() {
     this.InitCollegeInfo(1) // 初始化
     this.getTotal() // 获取总数
+    this.headers = { Authorization: getToken() }
   },
   methods: {
     /**

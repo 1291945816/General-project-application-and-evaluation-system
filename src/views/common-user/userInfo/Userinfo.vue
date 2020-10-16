@@ -203,11 +203,17 @@ export default {
             newpassword: this.passwordChange.newpassword
           }).then(res => {
             this.$message.success(res.message)
+            this.logout()
           })
         } else {
           this.$message.error('提交失败')
         }
       })
+    },
+
+    async logout() {
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 
