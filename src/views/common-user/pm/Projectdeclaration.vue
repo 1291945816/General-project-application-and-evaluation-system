@@ -46,7 +46,7 @@
       <span style="font-size: 13px;color: brown;">附件的上传请前往《项目信息》->《操作》->《附件》进行</span>
     </el-form>
     <div class="button">
-      <el-button type="primary" plain @click="submit()">提交</el-button>
+      <el-button type="primary" :loading="loading" plain @click="submit()">提交</el-button>
     </div>
 
   </div>
@@ -57,6 +57,7 @@ import { getProjectCategory, applyProject } from '@/api/project'
 export default {
   data() {
     return {
+      loading: false,
       options: [],
       projectData: {
         teacher: '',
@@ -111,9 +112,11 @@ export default {
       console.log(data)
       this.$refs['projectData'].validate(val => {
         if (val) {
+          this.loading = true
           applyProject(data).then(res => {
             this.$message.success(res.message)
             this.$message.success('提交成功，若需提交附件，请在项目信息模块进行上传')
+            this.loading = false
           })
         } else {
           this.$message.error('请完善申报表的信息')

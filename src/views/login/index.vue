@@ -1,7 +1,7 @@
 <template>
   <div class="dowebok">
-
     <div class="container-login100">
+
       <div class="wrap-login100">
         <div class="login100-pic js-tilt" data-tilt>
           <img src="../../styles/images/img-01.png" alt="IMG">
@@ -83,10 +83,9 @@ export default {
       }
     }
     return {
-      msg: '系统维护中...',
       loginForm: {
         username: '1800300916',
-        password: '123456'
+        password: 'hps19991214'
 
       },
       loginRules: {
@@ -144,7 +143,9 @@ export default {
 </script>
 
 <style  scoped>
+
 @import url('../../styles/fonts/font-awesome-4.7.0/css/font-awesome.min.css');
 @import url('../../styles/util.css');
 @import url('../../styles/main.css');
+
 </style>

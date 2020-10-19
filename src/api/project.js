@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import axios from 'axios'
 
 /**
  * 获取到所有的项目类别
@@ -20,7 +21,14 @@ export function applyProject(data) {
     data
   })
 }
-
+export function downloadProjectFile(id, header) {
+  return axios.get('http://localhost:61000/api/project/download/' + id, {
+    params: {},
+    responseType: 'blob',
+    headers: header
+  }
+  )
+}
 /**
  * pageNum
  * Limit=10

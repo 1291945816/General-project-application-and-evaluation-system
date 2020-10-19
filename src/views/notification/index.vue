@@ -55,7 +55,7 @@
     <el-dialog title="通知详情" width="60%" :visible.sync="dialogTableVisible" :close-on-click-modal="false">
       <div>
         <p style="font-size: 18px;"><span style="font-weight:bold">申报时间:</span> <el-tag style="margin-left: 10px;" effect="plain" type="warning">{{ applytimestart }}</el-tag> 至 <el-tag effect="plain" type="warning">{{ applytimeend }} </el-tag></p>
-        <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span> <el-tag style="margin-left: 10px;" type="warning">{{ annual }}</el-tag></p>
+        <p style="font-size: 18px;"><span style="font-weight:bold">年度: </span> <el-tag style="margin-left: 10px;margin-top: 1px;" type="warning">{{ annual }}</el-tag></p>
         <p style="font-size: 18px;"><span style="font-weight:bold">评审时间:</span> <el-tag style="margin-left: 10px;" effect="plain" type="danger">{{ reviewtimestart }}</el-tag> 至 <el-tag effect="plain" type="danger">{{ reviewtimeend }} </el-tag></p>
         <p style="font-size: 18px;margin-bottom: 5px;"><span style="font-weight:bold">项目类别:</span> <el-tag style="margin-left: 10px;" type="success">{{ notice_item_name }}</el-tag></p>
         <hr>
@@ -66,12 +66,14 @@
   </div></template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import { formatDate } from '@/utils/timeHandle'
-import { getNotificationList, getNotificationcount } from '@/api/notification'
+import { getNotificationList, getNotificationcount, downloadTemplateFile } from '@/api/notification'
 export default {
   name: 'Notification',
   data() {
     return {
+      header: null,
       totalnum: 0,
       search: '',
       tableData: [],
@@ -89,6 +91,7 @@ export default {
   created() {
     this.getData(1)
     this.getTotal()
+    this.header = { Authorization: getToken() }
   },
   methods: {
     getData(val) {
@@ -122,7 +125,28 @@ export default {
       this.dialogTableVisible = true
     },
     FiledownLoad(val) {
-      console.log('开始下载')
+      downloadTemplateFile(this.header, val.notice_id).then(
+        res => {
+          const data = res.data
+          console.log(res)
+          // 判断上传的文件大小是否符合规范！！！
+          if (data.size === 0) {
+            this.$message.error('本公告未包含附件！')
+            return
+          }
+          const url = window.URL.createObjectURL(new Blob([data]))
+          const a = document.createElement('a')
+          a.style.display = 'none'
+          a.href = url
+          a.setAttribute('download', val.notice_title + '-' + '附件.zip')
+          document.body.appendChild(a)
+          a.click() // 执行下载
+          window.URL.revokeObjectURL(a.href)
+          document.body.removeChild(a)
+        }
+      ).catch(function(error) {
+        console.log(error)
+      })
     }
   }
 }

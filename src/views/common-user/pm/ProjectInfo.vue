@@ -79,7 +79,7 @@
           width="300"
         >
           <template slot-scope="scope">
-            <el-button type="success" size="small" :disabled="scope.row.project_status === '申报中'?false:true" @click="file(scope.row.project_id)">附件</el-button>
+            <el-button type="success" size="small" :disabled="scope.row.project_status === '申报中'?false:true" @click="file(scope.row)">附件</el-button>
             <el-button type="primary" size="small" :disabled="scope.row.project_status === '申报中'?false:true" @click="edit(scope.row)">修改</el-button>
             <el-button type="danger" size="small" :disabled="scope.row.project_status === '申报中'?false:true" @click="deleteProject(scope.$index,scope.row.project_id)">删除</el-button>
           </template>
@@ -99,22 +99,26 @@
     <el-dialog
       title="附件操作"
       :visible.sync="dialogVisible"
-      width="10%"
+      width="20%"
       :close-on-click-modal="false"
     >
       <div style="display: inline;">
         <span slot="footer" class="dialog-footer">
 
           <el-upload
+            :headers="header"
             :action="action"
             accept="application/x-zip-compressed"
+            :on-success="uploadSuccess"
+            :on-error="uploadError"
             multiple
             :limit="1"
           >
             <el-button size="small" type="primary">点击上传附件</el-button>
             <div slot="tip" class="el-upload__tip" style="color: red;font-weight: bold;">只能上传zip文件</div>
           </el-upload>
-          <el-button size="small" type="success" style="margin-top: 10px;">点击下载附件</el-button>
+
+          <el-button size="small" type="success" style="margin-top: 10px;" @click="downloadFile()">点击下载附件</el-button>
         </span></div>
 
     </el-dialog>
@@ -160,12 +164,15 @@
 <script>
 // 导入相关文件
 
-import { getProjectCategory, getProjectInfo, getProjectNumber, searchByCondition, deleteProject, updateProject } from '@/api/project'
+import { getToken } from '@/utils/auth'
+import { getProjectCategory, getProjectInfo, getProjectNumber, searchByCondition, deleteProject, updateProject, downloadProjectFile } from '@/api/project'
 export default {
   data() {
     return {
       searchCondition: '',
       category: [],
+      id: '',
+      header: {},
       columns: [
         { id: 'project_id', label: '项目ID', width: 200 },
         { id: 'project_name', label: '项目名称' },
@@ -175,6 +182,7 @@ export default {
       dialogVisible: false,
       ProjectInfo: [],
       total: Number(7),
+      projectName: '',
       action: '',
       editData: {
         project_id: '',
@@ -194,6 +202,7 @@ export default {
     }
   },
   created() {
+    this.header = { Authorization: getToken() }
     this.getCategorys()
     getProjectInfo({ pageNum: 0, limit: 10 }).then(res => {
       this.ProjectInfo = res.data
@@ -261,9 +270,44 @@ export default {
     search() {
       this.handle(1)
     },
-    file(id) {
-      this.action = '/api/project/upload/' + id
+    file(val) {
+      this.action = 'http://localhost:61000/api/project/upload/' + val.project_id
+      this.id = val.project_id
+      this.projectName = val.project_name
+
       this.dialogVisible = true
+    },
+    uploadSuccess(res) {
+      this.$message.success(res.message)
+    },
+    uploadError(res) {
+      this.$message.error(res.message)
+    },
+    downloadFile() {
+      downloadProjectFile(this.id, this.header)
+        .then(
+          res => {
+            const data = res.data
+            console.log(res)
+            // 判断上传的文件大小是否符合规范！！！
+            if (data.size === 0) {
+              this.$message.error('你还未上传附件，下载失败。')
+              return
+            }
+            const url = window.URL.createObjectURL(new Blob([data]))
+            const a = document.createElement('a')
+            a.style.display = 'none'
+            a.href = url
+            a.setAttribute('download', this.projectName + '-' + '附件.zip')
+            document.body.appendChild(a)
+            a.click() // 执行下载
+            window.URL.revokeObjectURL(a.href)
+            document.body.removeChild(a)
+          }
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
     },
     // 下方分页的一个处理
     handle(val) {

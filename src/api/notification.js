@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+
+import axios from 'axios'
 // 获取通知列表
 export function getNotificationList(params) {
   return request({
@@ -16,12 +18,13 @@ export function getNotificationcount() {
 }
 
 // 获取模板文件
-export function downloadTemplateFile(params) {
-  return request({
-    url: '/api/notification/downloadTemplateFile',
-    method: 'get',
-    params
-  })
+export function downloadTemplateFile(header, id) {
+  return axios.get('http://localhost:61000/api/notification/downloadTemplateFile/' + id, {
+    params: {},
+    responseType: 'blob',
+    headers: header
+  }
+  )
 }
 
 // 更新通知信息
