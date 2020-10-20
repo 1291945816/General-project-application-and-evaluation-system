@@ -117,6 +117,9 @@ export default {
             this.$message.success(res.message)
             this.$message.success('提交成功，若需提交附件，请在项目信息模块进行上传')
             this.loading = false
+          }).catch(err => {
+            this.$message.error(err)
+            this.loading = false
           })
         } else {
           this.$message.error('请完善申报表的信息')

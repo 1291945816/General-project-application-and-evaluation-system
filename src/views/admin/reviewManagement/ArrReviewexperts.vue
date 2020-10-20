@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <el-select v-model="selectedCondition" placeholder="请选择项目类型">
+      <el-select v-model="selectedCondition" style="width: 20%;" placeholder="请选择项目类型">
         <el-option
           v-for="item in category"
           :key="item.id"

@@ -52,7 +52,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log(error.status) // for debug
     Message({
       message: error.message,
       type: 'error',

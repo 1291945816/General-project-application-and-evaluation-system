@@ -221,6 +221,7 @@
   </div></template>
 
 <script>
+import { getToken } from '@/utils/auth'
 import { formatDate } from '@/utils/timeHandle'
 import tinymce from '@/components/Ty-editor.vue'
 import { getNotificationList, getNotificationcount, upNotificationInfo, deleteNotificationInfo, newNotificationInfo } from '@/api/notification'
@@ -237,9 +238,7 @@ export default {
         id: '',
         action: '',
         limit: 1,
-        headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxODAwMzAwOTE2IiwiY3JlYXRlZCI6MTU5NzkwODg4NDk1NSwiZXhwIjoxNTk3OTk1Mjg0fQ.Vs9YRjT4pIJCoozx1I0rukEukFJky1xrBhNMBC4ZVsXaU3sLVKypnIFiSntui0x3hSqaKr_WsBbOBvZUYs82fA'
-        }
+        headers: null
 
       },
       // 新增通知部分
@@ -319,6 +318,9 @@ export default {
   created() {
     this.getData(1)
     this.getTotal()
+    this.file.headers = {
+      Authorization: getToken()
+    }
   },
   methods: {
     addNotice() {
@@ -495,8 +497,8 @@ export default {
     },
     fileHandle(value) {
       this.file.fileVisi = true
-      this.file.id = value.id // 文件ID
-      console.log(value.id)
+      this.file.id = value.notice_id // 文件ID
+      console.log(value.notice_id)
     }
 
   }
